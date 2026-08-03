@@ -3,6 +3,13 @@ const router   = express.Router();
 const supabase = require("../../db/supabase");
 const logger = require("../logger");
 const { requireAuth } = require("../middleware/authMiddleware");
+const { getProfileById, updateProfileById } = require("../controllers/profileController");
+
+// ── GET /api/profile/:user_id ─────────────────────────────────────────────────
+router.get("/:user_id", requireAuth, getProfileById);
+
+// ── PUT /api/profile/:user_id ────────────────────────────────────────────────
+router.put("/:user_id", requireAuth, updateProfileById);
 
 // ── GET /api/profile ──────────────────────────────────────────────────────────
 // Returns the current user's profile (from Supabase user_metadata).

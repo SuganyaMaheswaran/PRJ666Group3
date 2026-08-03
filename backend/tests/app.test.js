@@ -74,6 +74,7 @@ describe("Express App Configuration (app.js)", ()=>{
     const routesToTest = [
       { path: "/api/auth/me", name: "Auth" },
       { path: "/api/profile", name: "Profile" },
+      { path: "/api/profile/test-user", name: "Profile by user" },
       { path: "/api/tasks", name: "Tasks" },
       
       // Fixed: targets an active route path

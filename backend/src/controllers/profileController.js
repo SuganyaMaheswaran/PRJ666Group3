@@ -9,6 +9,14 @@ function userSupabase(req) {
   });
 }
 
+function authorizeProfile(req, res) {
+  if (req.params.user_id !== req.user.id) {
+    res.status(403).json({ message: "You can only access your own profile." });
+    return false;
+  }
+  return true;
+}
+
 const PROFILE_FIELDS = [
   "first_name",
   "last_name",
@@ -49,7 +57,22 @@ function profileUpdates(body) {
   return PROFILE_FIELDS.reduce((updates, field) => {
     const camelField = Object.keys(FIELD_ALIASES).find(key => FIELD_ALIASES[key] === field);
     const value = body[field] !== undefined ? body[field] : body[camelField];
-    if (value !== undefined) updates[field] = value;
+    if (value === undefined) return updates;
+    if (value === null) {
+      updates[field] = null;
+      return updates;
+    }
+    if (typeof value !== "string") throw new Error(`${field} must be a string.`);
+
+    const trimmed = value.trim();
+    if (field === "arrival_date" || field === "permit_expiry") {
+      if (trimmed && !/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+        throw new Error(`${field} must use YYYY-MM-DD format.`);
+      }
+      updates[field] = trimmed || null;
+    } else {
+      updates[field] = trimmed;
+    }
     return updates;
   }, {});
 }
@@ -62,15 +85,29 @@ async function findProfile(req) {
     .maybeSingle();
 }
 
+async function getProfileById(req, res) {
+  if (!authorizeProfile(req, res)) return;
+  return getProfile(req, res);
+}
+
+async function updateProfileById(req, res) {
+  if (!authorizeProfile(req, res)) return;
+  return updateProfile(req, res);
+}
+
 async function getProfile(req, res) {
   const { data, error } = await findProfile(req);
   if (error) return res.status(500).json({ message: error.message });
-  if (!data) return res.status(404).json({ message: "Profile not found." });
-  return res.json(toProfile(data, req.user));
+  return res.json(toProfile(data ?? { user_id: req.user.id }, req.user));
 }
 
 async function createProfile(req, res) {
-  const updates = profileUpdates(req.body);
+  let updates;
+  try {
+    updates = profileUpdates(req.body);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
   const { data, error } = await userSupabase(req)
     .from("profiles")
     .insert([{ user_id: req.user.id, ...updates }])
@@ -86,7 +123,12 @@ async function createProfile(req, res) {
 }
 
 async function updateProfile(req, res) {
-  const updates = profileUpdates(req.body);
+  let updates;
+  try {
+    updates = profileUpdates(req.body);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
   if (Object.keys(updates).length === 0) {
     return res.status(400).json({ message: "At least one profile field is required." });
   }
@@ -116,7 +158,9 @@ async function deleteProfile(req, res) {
 
 module.exports = {
   getProfile,
+  getProfileById,
   createProfile,
   updateProfile,
+  updateProfileById,
   deleteProfile,
 };

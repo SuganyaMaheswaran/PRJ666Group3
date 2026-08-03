@@ -63,6 +63,7 @@ function MiniCalendar({ events = [] }) {
 const NAV = [
   { to: "/getting-started",         icon: "🗺️", label: "Get Started"   },
   { to: "/dashboard",               icon: "🏠", label: "Dashboard"     },
+
   { to: "/pr-pathway",              icon: "🍁", label: "PR Pathway"    },
   { to: "/tasks",                   icon: "✅", label: "My Tasks"      },
   { to: "/notifications-dashboard", icon: "🔔", label: "Notifications" },
@@ -95,7 +96,7 @@ export default function AppSidebar({ collapsed, onToggle }) {
       {/* User greeting */}
       {!collapsed && user && (
         <div className="asb-user">
-          <div className="asb-avatar">{user.name[0]}</div>
+          <NavLink to="/profile" className="asb-avatar" aria-label="Open profile settings" title="Profile settings">{user.name[0]}</NavLink>
           <div>
             <div className="asb-user__name">{user.name}</div>
             <div className="asb-user__status">{user.immigrationStatus}</div>
