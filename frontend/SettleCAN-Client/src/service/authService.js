@@ -80,18 +80,20 @@ export async function logoutUser(token) {
 }
 
 // ── profile ───────────────────────────────────────────────────────────────────
-export async function getProfile(token) {
-    const res  = await apiFetch(`${API_BASE_URL}/profile`, {
-        headers: authHeader(token),
+export async function getProfile(token, userId) {
+    const endpoint = userId ? `/profile/${encodeURIComponent(userId)}` : "/profile";
+    const res  = await apiFetch(`${API_BASE_URL}${endpoint}`, {
+      headers: authHeader(token),
     });
     const data = await safeJson(res);
     if (!res.ok) throw new Error(data.message || "Could not fetch profile");
     return data;
 }
 
-export async function updateProfile(token, updates) {
-    const res  = await apiFetch(`${API_BASE_URL}/profile`, {
-        method:  "PATCH",
+export async function updateProfile(token, userId, updates) {
+    const endpoint = userId ? `/profile/${encodeURIComponent(userId)}` : "/profile";
+    const res  = await apiFetch(`${API_BASE_URL}${endpoint}`, {
+        method:  userId ? "PUT" : "PATCH",
         headers: { "Content-Type": "application/json", ...authHeader(token) },
         body:    JSON.stringify(updates),
     });
