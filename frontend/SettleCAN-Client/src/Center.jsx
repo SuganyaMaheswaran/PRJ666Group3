@@ -17,6 +17,8 @@ import TopNavbar    from "./navigation/top-navbar.jsx";
 import App               from "./App.jsx";
 import Login             from "./register/Login.jsx";
 import Register          from "./register/Register.jsx";
+import ForgotPassword    from "./register/ForgotPassword.jsx";
+import ResetPassword     from "./register/ResetPassword.jsx";
 import ImmigrationDetails from "./register/ImmigrationDetails.jsx";
 import Logout            from "./pages/Logout.jsx";
 import AboutPage         from "./pages/Aboutpage.jsx";
@@ -82,6 +84,8 @@ export default function Center() {
             <Route path="/about"              element={<AboutPage />} />
             <Route path="/login"              element={<Login />} />
             <Route path="/register"           element={<Register />} />
+            <Route path="/forgot-password"    element={<ForgotPassword />} />
+            <Route path="/reset-password"     element={<ResetPassword />} />
             <Route path="/immigration"        element={<ImmigrationDetails />} />
             <Route path="/logout"             element={<Logout />} />
 
