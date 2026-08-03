@@ -5,125 +5,139 @@ import { getProfile } from "../service/authService";
 import { getAccessToken } from "../service/tokenService";
 import "../scss/Auth.scss";
 
-// Reusing constants from ImmigrationDetails
-const PROVINCES = ["Ontario","Quebec","Nova Scotia","New Brunswick","Manitoba","British Columbia","Prince Edward Island","Saskatchewan","Alberta","Newfoundland and Labrador"];
-const STATUSES = ["International Student","Work Permit Holder","Permanent Resident","Refugee / Protected Person","Visitor / Tourist"];
-const COUNTRIES = ["Afghanistan","Albania","Algeria","India","Canada", /* ... rest of your countries list */];
-const LANG_TESTS = ["None","IELTS","CELPIP","TEF Canada","TCF Canada","TOEFL"];
+const PROVINCES = [
+  "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador",
+  "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island",
+  "Quebec", "Saskatchewan", "Yukon",
+];
+
+const STATUSES = [
+  "Permanent Resident", "Work Permit", "Study Permit", "Visitor", "Citizen",
+  "International Student", "Work Permit Holder", "Refugee / Protected Person", "Visitor / Tourist",
+];
+
+const emptyForm = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  immigrationStatus: STATUSES[0],
+  province: PROVINCES[0],
+  arrivalDate: "",
+};
 
 function Profile() {
-  const { user, updateProfile, loading, authError } = useContext(AuthContext);
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    immigrationStatus: "",
-    province: "",
-    country: "",
-    permitExpiry: "",
-    arrivalDate: "",
-    languageTest: "",
-  });
+  const { user, updateProfile, loading, authError, clearAuthError } = useContext(AuthContext);
+  const [form, setForm] = useState(emptyForm);
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user) return;
-
-    const populateForm = profile => setForm({
-      firstName: profile.firstName || "",
-      lastName: profile.lastName || "",
-      immigrationStatus: profile.immigrationStatus || STATUSES[0],
-      province: profile.province || PROVINCES[0],
-      country: profile.country || COUNTRIES[0],
-      permitExpiry: profile.permitExpiry || "",
-      arrivalDate: profile.arrivalDate || "",
-      languageTest: profile.languageTest || LANG_TESTS[0],
-    });
-
-    populateForm(user);
-
     let active = true;
-    getProfile(getAccessToken())
+    setLoadingProfile(true);
+    setError("");
+    setForm(current => ({
+      ...current,
+      firstName: user.firstName ?? "",
+      lastName: user.lastName ?? "",
+      email: user.email ?? "",
+      immigrationStatus: user.immigrationStatus || STATUSES[0],
+      province: user.province || PROVINCES[0],
+      arrivalDate: user.arrivalDate ?? "",
+    }));
+
+    getProfile(getAccessToken(), user.id)
       .then(profile => {
-        if (active) populateForm(profile);
+        if (!active) return;
+        setForm({
+          firstName: profile.firstName ?? "",
+          lastName: profile.lastName ?? "",
+          email: profile.email ?? user.email ?? "",
+          immigrationStatus: profile.immigrationStatus || STATUSES[0],
+          province: profile.province || PROVINCES[0],
+          arrivalDate: profile.arrivalDate ?? "",
+        });
       })
-      .catch(() => {});
+      .catch(err => {
+        if (active) setError(err.message || "Could not load your profile.");
+      })
+      .finally(() => {
+        if (active) setLoadingProfile(false);
+      });
 
     return () => { active = false; };
   }, [user]);
 
-  function set(field) { return e => setForm(f => ({ ...f, [field]: e.target.value })); }
-  function setDate(field) { return val => setForm(f => ({ ...f, [field]: val })); }
+  function set(field) {
+    return event => setForm(current => ({ ...current, [field]: event.target.value }));
+  }
 
-  async function handleUpdate(e) {
-    e.preventDefault();
+  function setArrivalDate(value) {
+    setForm(current => ({ ...current, arrivalDate: value }));
+  }
+
+  async function handleUpdate(event) {
+    event.preventDefault();
+    setMessage("");
+    setError("");
+    clearAuthError();
     const success = await updateProfile(form);
-    setMessage(success ? "Profile updated successfully!" : "Could not update profile.");
-    setTimeout(() => setMessage(""), 3000);
+    if (success) setMessage("Profile updated successfully.");
   }
 
   return (
-    <div className="auth-page">
+    <div className="auth-page" data-testid="profile-settings">
       <div className="auth-card auth-card--wide">
-        <h2 className="auth-title">My Profile</h2>
-        {message && <div className="auth-success">{message}</div>}
-        {authError && <div className="auth-error">{authError}</div>}
+        <div className="auth-brand">settle<em>CAN</em></div>
+        <h2 className="auth-title">Profile Settings</h2>
+        <p className="auth-sub">Keep your personal and settlement information up to date.</p>
+
+        {(message || error || authError) && (
+          <div className={message ? "auth-success" : "auth-error"} role="status">
+            {message || error || authError}
+          </div>
+        )}
 
         <form onSubmit={handleUpdate} className="auth-form">
           <div className="auth-row">
             <div className="auth-field">
-              <label>First Name</label>
-              <input type="text" value={form.firstName} onChange={set("firstName")} />
+              <label htmlFor="profile-first-name">First Name</label>
+              <input id="profile-first-name" type="text" value={form.firstName} onChange={set("firstName")} maxLength={100} required />
             </div>
             <div className="auth-field">
-              <label>Last Name</label>
-              <input type="text" value={form.lastName} onChange={set("lastName")} />
+              <label htmlFor="profile-last-name">Last Name</label>
+              <input id="profile-last-name" type="text" value={form.lastName} onChange={set("lastName")} maxLength={100} required />
             </div>
           </div>
 
-          {/* Reusing the logic structure from ImmigrationDetails */}
-          <div className="auth-row">
-            <div className="auth-field">
-              <label>Canadian Immigration Status</label>
-              <select value={form.immigrationStatus} onChange={set("immigrationStatus")}>
-                {STATUSES.map(s => <option key={s}>{s}</option>)}
-              </select>
-            </div>
-            <div className="auth-field">
-              <label>Intended Province</label>
-              <select value={form.province} onChange={set("province")}>
-                {PROVINCES.map(p => <option key={p}>{p}</option>)}
-              </select>
-            </div>
+          <div className="auth-field">
+            <label htmlFor="profile-email">Email</label>
+            <input id="profile-email" type="email" value={form.email} readOnly aria-readonly="true" />
           </div>
 
           <div className="auth-row">
             <div className="auth-field">
-              <label>Country of Origin</label>
-              <select value={form.country} onChange={set("country")}>
-                {COUNTRIES.map(country => <option key={country}>{country}</option>)}
+              <label htmlFor="profile-immigration-status">Immigration Status</label>
+              <select id="profile-immigration-status" value={form.immigrationStatus} onChange={set("immigrationStatus")}>
+                {STATUSES.map(status => <option key={status}>{status}</option>)}
               </select>
             </div>
             <div className="auth-field">
-              <label>Language Test</label>
-              <select value={form.languageTest} onChange={set("languageTest")}>
-                {LANG_TESTS.map(test => <option key={test}>{test}</option>)}
+              <label htmlFor="profile-province">Province or Territory</label>
+              <select id="profile-province" value={form.province} onChange={set("province")}>
+                {PROVINCES.map(province => <option key={province}>{province}</option>)}
               </select>
             </div>
           </div>
 
-          <div className="auth-row">
-            <div className="auth-field">
-              <label>Permit / Stay Expiry Date</label>
-              <SmartDateInput value={form.permitExpiry} onChange={setDate("permitExpiry")} />
-            </div>
-            <div className="auth-field">
-              <label>Arrival Date</label>
-              <SmartDateInput value={form.arrivalDate} onChange={setDate("arrivalDate")} />
-            </div>
+          <div className="auth-field">
+            <label>Arrival Date</label>
+            <SmartDateInput value={form.arrivalDate} onChange={setArrivalDate} id="profile-arrival-date" />
           </div>
 
-          <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? "Saving..." : "Update Profile"}
+          <button type="submit" className="auth-btn" disabled={loading || loadingProfile} data-testid="profile-save-btn">
+            {loading ? "Saving…" : "Save Changes"}
           </button>
         </form>
       </div>
