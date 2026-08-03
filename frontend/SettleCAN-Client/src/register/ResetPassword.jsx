@@ -3,14 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { resetPassword } from "../service/authService";
 import "../scss/Auth.scss";
 
-function recoveryToken() {
-  const params = new URLSearchParams(window.location.hash.replace(/^#/, ""));
-  return params.get("access_token") || new URLSearchParams(window.location.search).get("access_token") || "";
+function recoveryTokens() {
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const searchParams = new URLSearchParams(window.location.search);
+  return {
+    accessToken: hashParams.get("access_token") || searchParams.get("access_token") || "",
+    refreshToken: hashParams.get("refresh_token") || searchParams.get("refresh_token") || "",
+  };
 }
 
 export default function ResetPassword() {
   const navigate = useNavigate();
-  const token = useMemo(() => recoveryToken(), []);
+  const tokens = useMemo(() => recoveryTokens(), []);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
@@ -19,7 +23,7 @@ export default function ResetPassword() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
-    if (!token) {
+    if (!tokens.accessToken || !tokens.refreshToken) {
       setError("This reset link is invalid or has expired.");
       return;
     }
@@ -34,7 +38,7 @@ export default function ResetPassword() {
 
     setLoading(true);
     try {
-      await resetPassword(token, password);
+      await resetPassword(tokens, password);
       navigate("/login", { state: { message: "Password reset successfully. You can now sign in." } });
     } catch (err) {
       setError(err.message);
@@ -75,7 +79,7 @@ export default function ResetPassword() {
               autoComplete="new-password"
             />
           </div>
-          <button type="submit" className="auth-btn" disabled={loading || !token}>
+          <button type="submit" className="auth-btn" disabled={loading || !tokens.accessToken || !tokens.refreshToken}>
             {loading ? "Updating..." : "Update password"}
           </button>
         </form>

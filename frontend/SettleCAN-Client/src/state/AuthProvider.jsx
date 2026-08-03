@@ -20,6 +20,7 @@ function toUiUser(apiUser) {
   return {
     id:                apiUser.id               ?? "",
     email:             apiUser.email            ?? "",
+    dob:               apiUser.dob              ?? "",
     name:              apiUser.firstName || apiUser.email?.split("@")[0] || "",
     fullName:          `${apiUser.firstName ?? ""} ${apiUser.lastName ?? ""}`.trim() || apiUser.email || "",
     immigrationStatus: apiUser.immigrationStatus ?? "International Student",
@@ -128,7 +129,7 @@ export function AuthProvider({ children }) {
     setAuthError(null);
 
     try {
-      const response = await updateProfileRequest(getAccessToken(), {
+      const response = await updateProfileRequest(getAccessToken(), user.id, {
         first_name: profile.firstName,
         last_name: profile.lastName,
         immigration_status: profile.immigrationStatus,

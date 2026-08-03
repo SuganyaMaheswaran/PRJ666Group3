@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
-const logger = require("../logger"); // Adjust the path as needed
-
+const logger = require("../logger"); 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {

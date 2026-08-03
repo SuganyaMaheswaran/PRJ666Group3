@@ -49,7 +49,7 @@ function Register() {
 
     setError("");
     // Pass collected data to step 2
-    navigate("/immigration", { state: { firstName: form.firstName, lastName: form.lastName, email: form.email, dob: form.dob, password: form.password } });
+    navigate("/immigration", { state: { form } });
   }
 
   return (

@@ -1,16 +1,36 @@
 // PRPathway.jsx — PR pathway comparison and guidance
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../state/AuthContext";
 import "../scss/FeaturePages.scss";
 
 // ── CRS score estimator ───────────────────────────────────────────────────────
 // Simplified CRS calculator based on IRCC's core human capital factors.
 // Not a replacement for the official IRCC tool — for estimation only.
+function ageFromDateOfBirth(dob) {
+  if (!dob) return null;
+  const birthDate = new Date(`${dob}T00:00:00`);
+  if (Number.isNaN(birthDate.getTime())) return null;
+
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const birthdayThisYear = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+  if (today < birthdayThisYear) age -= 1;
+  return age >= 17 && age <= 100 ? age : null;
+}
+
 function CRSEstimator() {
+  const { user } = useContext(AuthContext);
   const [form, setForm] = useState({
     age: "25", edu: "bachelors", canadaExp: "1", foreignExp: "1",
     clbFirst: "9", clbSecond: "0", jobOffer: "none", pnp: false, sibling: false,
     hasSpouse: false, spouseEdu: "secondary", spouseExp: "0", spouseClb: "0",
   });
+
+  useEffect(() => {
+    const age = ageFromDateOfBirth(user?.dob);
+    if (age !== null) setForm(form => ({ ...form, age: String(age) }));
+  }, [user?.dob]);
+
   const s = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   function calcCRS() {

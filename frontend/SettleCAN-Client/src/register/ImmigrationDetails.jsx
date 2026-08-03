@@ -52,7 +52,7 @@ function ImmigrationDetails() {
   useEffect(() => { clearAuthError(); }, [clearAuthError]);
 
   // Data passed from step 1
-  const step1 = location.state ?? {};
+  const step1 = location.state?.form ?? {};
 
   const [form, setForm] = useState({
     immigrationStatus: "International Student",
@@ -195,7 +195,7 @@ function ImmigrationDetails() {
         </form>
 
         <p className="auth-footer">
-          <Link to="/register">← Back to step 1</Link>
+          <Link to="/register" state={{ form: step1 }}>← Back to step 1</Link>
         </p>
       </div>
     </div>

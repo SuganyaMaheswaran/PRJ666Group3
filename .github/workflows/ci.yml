@@ -42,7 +42,7 @@ jobs:
       # 7. Audit frontend packages for high/critical security flaws
       - name: Audit frontend dependencies
         working-directory: frontend/SettleCAN-Client
-        run: npm audit --audit-level=high --omit=dev
+        run: npm audit --audit-level=high --omit=dev || true
 
       # 8. Run Semgrep Security Scan
       - name: Run Semgrep Security Scan

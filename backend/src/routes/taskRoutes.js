@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const supabase = require("../../db/supabase");
 const { requireAuth } = require("../middleware/authMiddleware");
-const logger = require("../../logger"); // Adjust path if needed
-
+const logger = require("../logger");  
 // All routes require authentication
 router.use(requireAuth);
 
