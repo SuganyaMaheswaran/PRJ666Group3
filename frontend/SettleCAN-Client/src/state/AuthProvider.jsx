@@ -128,7 +128,7 @@ export function AuthProvider({ children }) {
     setAuthError(null);
 
     try {
-      const response = await updateProfileRequest(getAccessToken(), {
+      const response = await updateProfileRequest(getAccessToken(), user.id, {
         first_name: profile.firstName,
         last_name: profile.lastName,
         immigration_status: profile.immigrationStatus,
