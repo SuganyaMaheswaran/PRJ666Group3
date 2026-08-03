@@ -47,6 +47,7 @@ router.post("/register", async (req, res) => {
     user: {
       id:                data.user?.id,
       email:             data.user?.email,
+      dob:               meta.dob ?? "",
       firstName:         meta.first_name,
       lastName:          meta.last_name,
       immigrationStatus: meta.immigration_status,
@@ -78,6 +79,7 @@ router.post("/login", async (req, res) => {
     user: {
       id:                data.user?.id,
       email:             data.user?.email,
+      dob:               meta.dob ?? "",
       firstName:         meta.first_name         ?? "",
       lastName:          meta.last_name          ?? "",
       immigrationStatus: meta.immigration_status ?? "International Student",
@@ -155,6 +157,7 @@ router.get("/me", async (req, res) => {
     user: {
       id:                data.user.id,
       email:             data.user.email,
+      dob:               meta.dob ?? "",
       firstName:         meta.first_name         ?? "",
       lastName:          meta.last_name          ?? "",
       immigrationStatus: meta.immigration_status ?? "International Student",
