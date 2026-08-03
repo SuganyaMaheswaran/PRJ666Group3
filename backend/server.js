@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const app    = require("./app"); 
-const logger = require("./logger"); // Import your configured Pino logger
+const logger = require("./src/logger"); // Import your configured Pino logger
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 8080;
