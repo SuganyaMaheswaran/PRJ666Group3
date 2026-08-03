@@ -26,6 +26,7 @@ import AboutPage         from "./pages/Aboutpage.jsx";
 // Authenticated pages
 import GettingStarted       from "./pages/GettingStarted.jsx";
 import Dashboard            from "./pages/Dashboard.jsx";
+import Profile              from "./pages/Profile.jsx";
 import TasksDashboard       from "./pages/TasksDashboard.jsx";
 import TaskManager          from "./pages/TaskManager.jsx";
 import Checklist            from "./pages/Checklist.jsx";
@@ -104,6 +105,7 @@ export default function Center() {
             <Route element={<AuthLayout />}>
               <Route path="/getting-started"         element={<GettingStarted />} />
               <Route path="/dashboard"               element={<Dashboard />} />
+              <Route path="/profile"                element={<Profile />} />
               <Route path="/tasks"                   element={<TasksDashboard />} />
               <Route path="/task-manager"            element={<TaskManager />} />
               <Route path="/checklist"               element={<Checklist />} />
