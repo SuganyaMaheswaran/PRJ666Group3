@@ -1,7 +1,7 @@
 const express  = require("express");
 const router   = express.Router();
 const supabase = require("../../db/supabase");
-const logger = require("../../logger");
+const logger = require("../logger");
 const { requireAuth } = require("../middleware/authMiddleware");
 
 // ── GET /api/profile ──────────────────────────────────────────────────────────
