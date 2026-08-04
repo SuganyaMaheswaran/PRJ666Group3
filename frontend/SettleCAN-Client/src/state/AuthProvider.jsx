@@ -20,6 +20,7 @@ function toUiUser(apiUser) {
   return {
     id:                apiUser.id               ?? "",
     email:             apiUser.email            ?? "",
+    dob:               apiUser.dob              ?? "",
     name:              apiUser.firstName || apiUser.email?.split("@")[0] || "",
     fullName:          `${apiUser.firstName ?? ""} ${apiUser.lastName ?? ""}`.trim() || apiUser.email || "",
     immigrationStatus: apiUser.immigrationStatus ?? "International Student",
