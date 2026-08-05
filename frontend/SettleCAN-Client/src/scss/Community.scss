@@ -1,7 +1,8 @@
 
 
 .community-page {
-  background: #F4F6FA;
+  // Matches .auth-layout's background (AuthLayout.scss).
+  background: #dfdbd9;
   min-height: calc(100vh - 60px);
   padding: 36px 0;
 }
