@@ -300,7 +300,7 @@ export default function WorkPermitInfo() {
               </div>
               <div
                 style={{
-                  background: "#f9f5f6",
+                  background: "#F9F5F6",
                   borderRadius: "0.5rem",
                   padding: "0.5rem 0.75rem",
                   fontSize: "0.82rem",
@@ -436,7 +436,7 @@ export default function WorkPermitInfo() {
                   <div style={{ fontSize: "0.85rem", color: "#3a2a30" }}>{item.full}</div>
                 </div>
               </div>
-              <div style={{ background: "#f9f5f6", borderRadius: "0.4rem", padding: "0.5rem 0.75rem", fontSize: "0.8rem", color: "#5a4a50" }}>
+              <div style={{ background: "#F9F5F6", borderRadius: "0.4rem", padding: "0.5rem 0.75rem", fontSize: "0.8rem", color: "#5a4a50" }}>
                 💡 {item.note}
               </div>
             </div>
