@@ -10,6 +10,7 @@
 .dashboard {
   padding: 2rem 2.25rem;
   max-width: 860px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -261,6 +262,104 @@
     &__arrow {
       font-size: 0.85rem;
       color: #c0a8b0;
+    }
+  }
+
+  // ── Loading skeletons — shown instead of default/fallback content while
+  // the real task fetch is in flight, so the dashboard never flashes
+  // placeholder data before settling on the real numbers. ───────────────────
+  .dash-skeleton-line {
+    height: 1rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f0e8ea 25%, #f7f2f3 37%, #f0e8ea 63%);
+    background-size: 400% 100%;
+    animation: dash-shimmer 1.4s ease infinite;
+
+    & + & { margin-top: 0.5rem; }
+  }
+
+  .dash-next-item--skeleton {
+    height: 52px;
+    background: linear-gradient(90deg, #f0e8ea 25%, #f7f2f3 37%, #f0e8ea 63%);
+    background-size: 400% 100%;
+    animation: dash-shimmer 1.4s ease infinite;
+  }
+
+  @keyframes dash-shimmer {
+    0%   { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+  }
+
+  // ── Compliance card ──────────────────────────────────────────────────────
+  .dash-compliance-card {
+    @extend %card;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    &__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__fraction {
+      font-size: 0.9rem;
+      color: #1a0d10;
+      margin: 0;
+      strong { color: $primary; }
+    }
+
+    &__pct {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: $primary;
+      line-height: 1;
+    }
+
+    &__done {
+      font-size: 0.85rem;
+      color: #15803d;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    &__scroll {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding-right: 0.25rem;
+    }
+
+    &__row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: 0.6rem;
+      text-decoration: none;
+      transition: background 0.15s;
+
+      &:hover { background: #f7f2f3; }
+    }
+
+    &__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #9a8a90;
+      flex-shrink: 0;
+
+      &--high { background: #dc2626; }
+    }
+
+    &__row-text {
+      font-size: 0.85rem;
+      color: #2b1a1f;
+      font-weight: 500;
     }
   }
 
