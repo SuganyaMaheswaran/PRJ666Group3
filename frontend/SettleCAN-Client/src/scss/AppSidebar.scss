@@ -55,13 +55,19 @@ $sb-wc: 64px;   // collapsed
     &:hover { background: #f5eff2; color: $primary; }
   }
 
-  // ── User ───────────────────────────────────────────────────────────────────
+  // ── User (whole block is a link to /profile) ─────────────────────────────────
   .asb-user {
     display: flex;
     align-items: center;
     gap: 0.65rem;
     padding: 0.85rem 1rem;
     border-bottom: 1px solid #f5eff2;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover { background: #f5eff2; }
   }
 
   .asb-avatar {
