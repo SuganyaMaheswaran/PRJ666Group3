@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Bootstrap CSS — required for Modals, Badges, Tables, ProgressBar, etc.
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -28,8 +28,7 @@ import GettingStarted       from "./pages/GettingStarted.jsx";
 import Dashboard            from "./pages/Dashboard.jsx";
 import Profile              from "./pages/Profile.jsx";
 import TasksDashboard       from "./pages/TasksDashboard.jsx";
-import TaskManager          from "./pages/TaskManager.jsx";
-import Checklist            from "./pages/Checklist.jsx";
+import CalendarPage         from "./pages/Calendar.jsx";
 import Community            from "./pages/Community.jsx";
 import ContentManagement    from "./pages/ContentManagement.jsx";
 import NotificationsDashboard from "./pages/NotificationsDashboard.jsx";
@@ -107,8 +106,7 @@ export default function Center() {
               <Route path="/dashboard"               element={<Dashboard />} />
               <Route path="/profile"                element={<Profile />} />
               <Route path="/tasks"                   element={<TasksDashboard />} />
-              <Route path="/task-manager"            element={<TaskManager />} />
-              <Route path="/checklist"               element={<Checklist />} />
+              <Route path="/calendar"                element={<CalendarPage />} />
               <Route path="/community"               element={<Community />} />
               <Route path="/content-management"      element={<ContentManagement />} />
               <Route path="/notifications-dashboard" element={<NotificationsDashboard />} />
@@ -141,6 +139,11 @@ export default function Center() {
               <Route path="/guides/health-card"    element={<HealthCardGuide />} />
               <Route path="/guides/permit-renewal" element={<PermitRenewalGuide />} />
               <Route path="/guides/tax-return"     element={<TaxReturnGuide />} />
+
+              {/* Settlement Checklist and Task Manager are retired — My Tasks
+                  (subtasks + per-task dates) replaces both. */}
+              <Route path="/checklist"    element={<Navigate to="/tasks" replace />} />
+              <Route path="/task-manager" element={<Navigate to="/tasks" replace />} />
             </Route>
           </Routes>
         </BrowserRouter>
