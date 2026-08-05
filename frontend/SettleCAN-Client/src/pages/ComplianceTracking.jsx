@@ -59,11 +59,11 @@ export default function ComplianceTracking() {
     }
   }
 
-  if (loading) return <div className="fp-page"><p style={{ color: "#9a8a90" }}>Loading your compliance checklist…</p></div>;
+  if (loading) return <div className="fp-page fp-page--narrow"><p style={{ color: "#9a8a90" }}>Loading your compliance checklist…</p></div>;
 
   if (loadError) {
     return (
-      <div className="fp-page">
+      <div className="fp-page fp-page--narrow">
         <p style={{ color: "#9a8a90" }}>Couldn't load your compliance checklist. Check your connection and try again.</p>
         <button className="fp-btn fp-btn--primary" onClick={load}>Retry</button>
       </div>
@@ -71,7 +71,7 @@ export default function ComplianceTracking() {
   }
 
   return (
-    <div className="fp-page">
+    <div className="fp-page fp-page--narrow">
       <div className="fp-header">
         <span className="fp-header__eyebrow">📋 Stay Compliant</span>
         <h1 className="fp-header__title">Compliance Tracking</h1>
@@ -164,7 +164,7 @@ export default function ComplianceTracking() {
                       type="checkbox"
                       checked={isDone}
                       onChange={() => toggle(rule)}
-                      style={{ width: 17, height: 17, accentColor: "#8E0002", cursor: "pointer", flexShrink: 0 }}
+                      style={{ width: 17, height: 17, accentColor: "var(--color-primary)", cursor: "pointer", flexShrink: 0 }}
                     />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>

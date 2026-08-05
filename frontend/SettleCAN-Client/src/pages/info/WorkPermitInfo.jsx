@@ -218,7 +218,7 @@ export default function WorkPermitInfo() {
                     style={{
                       fontSize: "0.75rem",
                       fontWeight: 700,
-                      color: "#8E0002",
+                      color: "var(--color-primary)",
                       textDecoration: "none",
                       flexShrink: 0,
                     }}
@@ -277,7 +277,7 @@ export default function WorkPermitInfo() {
                     fontSize: "0.75rem",
                     fontWeight: 700,
                     textTransform: "uppercase",
-                    color: "#8E0002",
+                    color: "var(--color-primary)",
                     marginBottom: "0.3rem",
                   }}
                 >
@@ -300,7 +300,7 @@ export default function WorkPermitInfo() {
               </div>
               <div
                 style={{
-                  background: "#f9f5f6",
+                  background: "#F9F5F6",
                   borderRadius: "0.5rem",
                   padding: "0.5rem 0.75rem",
                   fontSize: "0.82rem",
@@ -335,7 +335,7 @@ export default function WorkPermitInfo() {
                 style={{
                   fontWeight: 800,
                   fontSize: "0.85rem",
-                  color: "#8E0002",
+                  color: "var(--color-primary)",
                   minWidth: "120px",
                   flexShrink: 0,
                 }}
@@ -418,7 +418,7 @@ export default function WorkPermitInfo() {
               hours: "0 hours — working is not permitted",
               full: "No work authorization exists on a visitor record",
               note: "Exceptions: certain short business activities (attending conferences, board meetings) may be allowed. Performing paid work without a permit is a serious violation.",
-              color: "#8E0002",
+              color: "var(--color-primary)",
             },
           ].map(item => (
             <div key={item.group} className="fp-card" style={{ borderLeft: `3px solid ${item.color}` }}>
@@ -436,7 +436,7 @@ export default function WorkPermitInfo() {
                   <div style={{ fontSize: "0.85rem", color: "#3a2a30" }}>{item.full}</div>
                 </div>
               </div>
-              <div style={{ background: "#f9f5f6", borderRadius: "0.4rem", padding: "0.5rem 0.75rem", fontSize: "0.8rem", color: "#5a4a50" }}>
+              <div style={{ background: "#F9F5F6", borderRadius: "0.4rem", padding: "0.5rem 0.75rem", fontSize: "0.8rem", color: "#5a4a50" }}>
                 💡 {item.note}
               </div>
             </div>
@@ -503,7 +503,7 @@ export default function WorkPermitInfo() {
                 rel="noreferrer"
                 style={{
                   fontSize: "0.83rem",
-                  color: "#8E0002",
+                  color: "var(--color-primary)",
                   fontWeight: 600,
                 }}
               >
@@ -517,7 +517,7 @@ export default function WorkPermitInfo() {
                 rel="noreferrer"
                 style={{
                   fontSize: "0.83rem",
-                  color: "#8E0002",
+                  color: "var(--color-primary)",
                   fontWeight: 600,
                 }}
               >
@@ -531,7 +531,7 @@ export default function WorkPermitInfo() {
                 rel="noreferrer"
                 style={{
                   fontSize: "0.83rem",
-                  color: "#8E0002",
+                  color: "var(--color-primary)",
                   fontWeight: 600,
                 }}
               >

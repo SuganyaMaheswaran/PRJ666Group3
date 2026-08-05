@@ -133,9 +133,36 @@ function estimateReadTime(sections = []) {
   return Math.max(1, Math.round(words / 200));
 }
 
+// content_db stores an article body as one flat text field (no structured
+// sections column) — admin-authored content marks section breaks with a
+// "## Heading" line, the same lightweight convention used when seeding
+// Welcome/Immigration Guide/Housing Tips. Splitting on that gives these
+// articles the same multi-section + table-of-contents layout as the static
+// ones below, instead of one unbroken block with no sidebar.
+function parseSections(bodyContent, fallbackHeading) {
+  // Normalize CRLF (Windows-saved SQL seed files, or a browser textarea
+  // submitting \r\n for Enter) to plain \n first — otherwise the \r sitting
+  // between a heading and its body blocks the per-section match below, even
+  // though the coarser split (which only needs a bare \n before the next
+  // "## ") still succeeds, silently falling every section back to the
+  // article's own title instead of its real heading.
+  const raw = (bodyContent ?? "").replace(/\r\n/g, "\n").trim();
+  if (!raw) return [];
+  if (!raw.includes("## ")) return [{ heading: fallbackHeading, body: raw }];
+
+  return raw
+    .split(/\n(?=## )/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const match = part.match(/^## (.+?)\n([\s\S]*)$/);
+      return match ? { heading: match[1].trim(), body: match[2].trim() } : { heading: fallbackHeading, body: part };
+    });
+}
+
 function categoryColor(cat) {
   const MAP = {
-    Employment: "#2563eb", Health: "#15803d", Immigration: "#8E0002",
+    Employment: "#2563eb", Health: "#15803d", Immigration: "var(--color-primary)",
     Finance: "#d97706", Housing: "#7c3aed", General: "#475569",
   };
   return MAP[cat] ?? "#475569";
@@ -324,21 +351,18 @@ export default function ArticleView() {
     fetchContent()
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          // Merge API articles. content_db stores the article body as one
-          // flat text field (body_content), not structured sections like
-          // the static articles below — wrap it as a single section so it
-          // still gets a real summary and read-time instead of the "1 min
-          // read, no summary" a genuinely empty sections list produces.
+          // Merge API articles, splitting body_content into headed
+          // sections (see parseSections) so these render with the same
+          // table-of-contents layout as the static articles below.
           const api = data
             .filter(a => a.status === "Published")
             .map(a => {
-              const sections = a.sections ?? (a.body_content?.trim()
-                ? [{ heading: a.title, body: a.body_content.trim() }]
-                : []);
+              const sections = a.sections ?? parseSections(a.body_content, a.title);
+              const firstBody = sections[0]?.body?.trim();
               return {
                 ...a,
                 id:       String(a.content_id ?? a.id),
-                summary:  a.summary ?? (a.body_content?.trim() ? a.body_content.trim().slice(0, 160) + (a.body_content.trim().length > 160 ? "…" : "") : undefined),
+                summary:  a.summary ?? (firstBody ? firstBody.slice(0, 160) + (firstBody.length > 160 ? "…" : "") : undefined),
                 sections,
                 readTime: a.readTime ?? estimateReadTime(sections),
               };

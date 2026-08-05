@@ -20,6 +20,7 @@ export default function NotificationsDashboard() {
     apiNotifs,
     markRead,
     markAllRead,
+    completeTask,
   } = useContext(NotificationsContext);
 
   const [showSync, setShowSync] = useState(false);
@@ -71,7 +72,7 @@ export default function NotificationsDashboard() {
             Email Notifications
             {unread > 0 && <span className="nd2__badge">{unread}</span>}
           </button>
-          <button className="nd2__action" onClick={() => navigate("/calendar")}>
+          <button className="nd2__action" onClick={() => navigate("/tasks")}>
             View Calendar
           </button>
           <button className="nd2__action" onClick={() => setShowSync(true)}>
@@ -107,9 +108,15 @@ export default function NotificationsDashboard() {
             <div key={n.id} className={`nd2__card nd2__card--${n.urgency}`}>
               <h3 className="nd2__card-title">{n.title}</h3>
               <p className="nd2__card-desc">{n.description}</p>
-              <Link to={n.guideUrl} className="nd2__card-btn">
-                {n.cta}
-              </Link>
+              {n.cta === "Take Action" && n.taskId ? (
+                <button className="nd2__card-btn" onClick={() => completeTask(n.taskId)}>
+                  {n.cta}
+                </button>
+              ) : (
+                <Link to={n.guideUrl} className="nd2__card-btn">
+                  {n.cta}
+                </Link>
+              )}
             </div>
           ))}
         </div>

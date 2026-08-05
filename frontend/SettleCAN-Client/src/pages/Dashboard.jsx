@@ -159,7 +159,9 @@ export default function Dashboard() {
       </div>
 
       {/* ── Progress card ─────────────────────────────────────────────────── */}
-      <div className="dash-progress-card">
+      {/* The whole card is the entry point to My Tasks — no separate
+          "View My Tasks →" link needed inside it. */}
+      <Link to="/tasks" className="dash-progress-card">
         {!tasksLoaded ? (
           <>
             <div className="dash-skeleton-line" style={{ width: "40%" }} />
@@ -183,12 +185,9 @@ export default function Dashboard() {
               <div className="dash-prog-fill" style={{ width: `${pct}%` }} />
             </div>
             {pct === 100 && totalTasks > 0 && <p className="dash-progress-card__done">🎉 All tasks complete!</p>}
-            <Link to="/tasks" className="dash-progress-card__link">
-              {totalTasks === 0 ? "Start My Tasks →" : "View My Tasks →"}
-            </Link>
           </>
         )}
-      </div>
+      </Link>
 
       {/* ── Stats strip ───────────────────────────────────────────────────── */}
       <div className="dash-stats">
@@ -211,12 +210,13 @@ export default function Dashboard() {
       </div>
 
       {/* ── Up next ───────────────────────────────────────────────────────── */}
+      {/* Each item below already links out — no separate "My Tasks →"
+          header link needed. */}
       <div className="dash-section">
         <div className="dash-section__head">
           <h2 className="dash-section__title">
             {!tasksLoaded ? "Up next" : upcoming.length > 0 ? "Coming up" : usingDefaults ? `Recommended for ${status || "newcomers"}` : "Up next"}
           </h2>
-          <Link to="/tasks" className="dash-section__see-all">My Tasks →</Link>
         </div>
         {!tasksLoaded ? (
           <div className="dash-next-list">
@@ -243,11 +243,12 @@ export default function Dashboard() {
       </div>
 
       {/* ── Compliance ────────────────────────────────────────────────────── */}
+      {/* Each row below already links to /compliance — no separate
+          "View all →" header link needed. */}
       {complianceRules.length > 0 && (
         <div className="dash-section">
           <div className="dash-section__head">
             <h2 className="dash-section__title">Compliance</h2>
-            <Link to="/compliance" className="dash-section__see-all">View all →</Link>
           </div>
           <div className="dash-compliance-card">
             <div className="dash-compliance-card__top">

@@ -18,10 +18,14 @@
     cursor: pointer;
     margin-right: 3rem;
 
+    @media (max-width: 480px) { margin-right: 0.75rem; }
+
     .brand-text {
       font-size: 1.5rem;
       font-weight: 600;
       color: $text-dark;
+
+      @media (max-width: 480px) { font-size: 1.15rem; }
 
       .brand-highlight {
         color: $primary;
@@ -86,6 +90,20 @@
 
       &::after { display: none; } // hide bootstrap's dropdown caret
     }
+  }
+
+  // Wraps TasksCalendarView, which already renders its own white card
+  // (background/radius/shadow) — the Dropdown.Menu itself is stripped
+  // down to a plain positioning shell so the calendar isn't double-boxed.
+  .calendar-dropdown {
+    width: 360px;
+    max-width: 92vw;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+
+    .tasks-cal { box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
   }
 
   .notif-dropdown {
@@ -157,6 +175,8 @@
     gap: 0.75rem;
     margin-left: auto;
 
+    @media (max-width: 480px) { gap: 0.4rem; }
+
     .signup-btn {
       background-color: $primary;
       border: none;
@@ -164,6 +184,8 @@
       font-weight: 600;
       padding: 0.45rem 1.2rem;
       border-radius: 6px;
+
+      @media (max-width: 480px) { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
     }
 
     .signin-btn {
@@ -173,6 +195,8 @@
       font-weight: 500;
       padding: 0.45rem 1.2rem;
       border-radius: 6px;
+
+      @media (max-width: 480px) { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
     }
   }
 }

@@ -92,7 +92,7 @@ function CRSEstimator() {
   const band = crs >= 500 ? { label: "Strong", color: "#15803d", bg: "#e6f9ef" }
     : crs >= 440 ? { label: "Competitive", color: "#b45309", bg: "#fff7e6" }
     : crs >= 380 ? { label: "Moderate", color: "#2563eb", bg: "#eff6ff" }
-    : { label: "Low", color: "#8E0002", bg: "#fdeaed" };
+    : { label: "Low", color: "var(--color-primary)", bg: "#fdeaed" };
 
   const Field = ({ label, children }) => (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
@@ -153,9 +153,9 @@ function CRSEstimator() {
         </>}
       </div>
 
-      <div style={{ background: "#f9f5f6", borderRadius: "0.6rem", padding: "0.75rem 1rem", fontSize: "0.8rem", color: "#5a4a50" }}>
+      <div style={{ background: "#F9F5F6", borderRadius: "0.6rem", padding: "0.75rem 1rem", fontSize: "0.8rem", color: "#5a4a50" }}>
         💡 Recent Express Entry draws range from <strong>~470–550</strong> for general rounds and <strong>lower</strong> for category-based draws (healthcare, trades, STEM, French). Check{" "}
-        <a href="https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-rounds.html" target="_blank" rel="noreferrer" style={{ color: "#8E0002", fontWeight: 700 }}>IRCC draw history →</a>
+        <a href="https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-rounds.html" target="_blank" rel="noreferrer" style={{ color: "var(--color-primary)", fontWeight: 700 }}>IRCC draw history →</a>
       </div>
     </div>
   );
@@ -233,6 +233,16 @@ const PATHWAYS = [
   },
 ];
 
+const COMPARISON_ROWS = [
+  { name: "Express Entry — FSW",     crs: "Yes",  job: "Not required (helps)",       exp: "Not required",       time: "~6 months" },
+  { name: "Express Entry — CEC",     crs: "Yes",  job: "Not required",               exp: "1 year in Canada",   time: "~6 months" },
+  { name: "Express Entry — FST",     crs: "Yes",  job: "Or trade certificate",       exp: "2 yrs skilled trade", time: "~6 months" },
+  { name: "PNP (EE-linked)",         crs: "+600", job: "Varies by stream",           exp: "Varies by province", time: "9–12 months" },
+  { name: "PNP (non-EE)",            crs: "No",   job: "Often required",             exp: "Varies by province", time: "15–19 months" },
+  { name: "Atlantic Immigration",    crs: "No",   job: "Yes — designated employer",  exp: "Not for graduates",  time: "~12 months" },
+  { name: "Family Sponsorship",      crs: "No",   job: "No",                         exp: "No",                 time: "12–24 months" },
+];
+
 const PR_STEPS = [
   { num: "01", title: "Determine your pathway", body: "Use the 'Come to Canada' wizard at canada.ca/immigration or consult a Regulated Canadian Immigration Consultant (RCIC)." },
   { num: "02", title: "Meet the eligibility criteria", body: "Work experience, education credentials, language tests (IELTS/CELPIP/TEF), and NOC classification all matter." },
@@ -266,8 +276,11 @@ export default function PRPathway() {
         <div className="fp-stat"><span className="fp-stat__num">1095</span><span className="fp-stat__label">Days for Citizenship</span></div>
       </div>
 
-      {/* Pathway selector tabs */}
-      <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
+      {/* Pathway selector — pill buttons on wider screens, a select on
+          mobile (four buttons with long labels wrap into an awkward,
+          uneven grid at phone widths). Same active/setActive state either
+          way, toggled purely by CSS. */}
+      <div className="fp-tabs">
         {PATHWAYS.map(p => (
           <button
             key={p.id}
@@ -279,6 +292,17 @@ export default function PRPathway() {
         ))}
       </div>
 
+      <select
+        className="fp-tabs-select"
+        value={active}
+        onChange={e => setActive(e.target.value)}
+        aria-label="Select a PR pathway"
+      >
+        {PATHWAYS.map(p => (
+          <option key={p.id} value={p.id}>{p.icon} {p.name}</option>
+        ))}
+      </select>
+
       {/* Pathway detail */}
       {current && (
         <div className="fp-card fp-card--accent" style={{ marginBottom: "1.75rem" }}>
@@ -289,11 +313,11 @@ export default function PRPathway() {
             </div>
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#8E0002" }}>{current.timeToPR}</div>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "var(--color-primary)" }}>{current.timeToPR}</div>
                 <div style={{ fontSize: "0.68rem", color: "#9a8a90", fontWeight: 600, textTransform: "uppercase" }}>Time to PR</div>
               </div>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#8E0002" }}>{current.processTime}</div>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "var(--color-primary)" }}>{current.processTime}</div>
                 <div style={{ fontSize: "0.68rem", color: "#9a8a90", fontWeight: 600, textTransform: "uppercase" }}>Processing</div>
               </div>
             </div>
@@ -304,7 +328,7 @@ export default function PRPathway() {
           </p>
 
           <div style={{ marginTop: "1rem" }}>
-            <p style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "#8E0002", margin: "0 0 0.5rem", letterSpacing: "0.07em" }}>Streams &amp; Requirements</p>
+            <p style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "var(--color-primary)", margin: "0 0 0.5rem", letterSpacing: "0.07em" }}>Streams &amp; Requirements</p>
             {current.streams.map(s => (
               <div key={s.name} style={{ background: "#fdf7f8", borderRadius: "0.6rem", padding: "0.65rem 0.8rem", marginBottom: "0.5rem" }}>
                 <p style={{ fontWeight: 700, fontSize: "0.88rem", margin: "0 0 0.2rem", color: "#1a0d10" }}>{s.name}</p>
@@ -325,10 +349,16 @@ export default function PRPathway() {
         <CRSEstimator />
       </div>
 
-      {/* Pathway comparison table */}
+      {/* Pathway comparison — a table on wider screens, stacked cards on
+          mobile (five columns of largely short phrases doesn't survive
+          being squeezed into a phone width, even with horizontal scroll —
+          see .fp-compare-cards in FeaturePages.scss). Same data, two
+          renderings, toggled purely by CSS media query so there's no
+          layout-detection logic. */}
       <div className="fp-section">
         <h2 className="fp-section__title">📊 Pathway Comparison at a Glance</h2>
-        <div style={{ overflowX: "auto" }}>
+
+        <div className="fp-table-wrap">
           <table className="fp-table">
             <thead>
               <tr>
@@ -340,25 +370,35 @@ export default function PRPathway() {
               </tr>
             </thead>
             <tbody>
-              {[
-                { name: "Express Entry — FSW",     crs: "Yes",  job: "Not required (helps)",  exp: "Not required",          time: "~6 months" },
-                { name: "Express Entry — CEC",     crs: "Yes",  job: "Not required",          exp: "1 year in Canada",      time: "~6 months" },
-                { name: "Express Entry — FST",     crs: "Yes",  job: "Or trade certificate",  exp: "2 yrs skilled trade",   time: "~6 months" },
-                { name: "PNP (EE-linked)",         crs: "+600", job: "Varies by stream",      exp: "Varies by province",    time: "9–12 months" },
-                { name: "PNP (non-EE)",            crs: "No",   job: "Often required",        exp: "Varies by province",    time: "15–19 months" },
-                { name: "Atlantic Immigration",    crs: "No",   job: "Yes — designated employer", exp: "Not for graduates", time: "~12 months" },
-                { name: "Family Sponsorship",      crs: "No",   job: "No",                    exp: "No",                    time: "12–24 months" },
-              ].map(row => (
+              {COMPARISON_ROWS.map(row => (
                 <tr key={row.name}>
                   <td><strong style={{ fontSize: "0.83rem" }}>{row.name}</strong></td>
                   <td style={{ fontSize: "0.82rem" }}>{row.crs}</td>
                   <td style={{ fontSize: "0.82rem" }}>{row.job}</td>
                   <td style={{ fontSize: "0.82rem" }}>{row.exp}</td>
-                  <td style={{ fontSize: "0.82rem", fontWeight: 600, color: "#8E0002" }}>{row.time}</td>
+                  <td style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-primary)" }}>{row.time}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className="fp-compare-cards">
+          {COMPARISON_ROWS.map(row => (
+            <div key={row.name} className="fp-compare-card">
+              <p className="fp-compare-card__name">{row.name}</p>
+              <div className="fp-compare-card__grid">
+                <span className="fp-compare-card__label">CRS points?</span>
+                <span className="fp-compare-card__value">{row.crs}</span>
+                <span className="fp-compare-card__label">Job offer required?</span>
+                <span className="fp-compare-card__value">{row.job}</span>
+                <span className="fp-compare-card__label">Canadian exp. required?</span>
+                <span className="fp-compare-card__value">{row.exp}</span>
+                <span className="fp-compare-card__label">Estimated time to PR</span>
+                <span className="fp-compare-card__value fp-compare-card__value--time">{row.time}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
