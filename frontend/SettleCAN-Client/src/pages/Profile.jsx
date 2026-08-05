@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../state/AuthContext";
 import SmartDateInput from "../components/SmartDateInput";
-import { getProfile } from "../service/authService";
-import { getAccessToken } from "../service/tokenService";
 import "../scss/Auth.scss";
 
 const PROVINCES = [
@@ -11,9 +9,15 @@ const PROVINCES = [
   "Quebec", "Saskatchewan", "Yukon",
 ];
 
+// The 5 canonical statuses the rest of the app (task generation, guide
+// content) actually recognizes — see backend/src/services/templateService.js.
+// Picking anything else here would leave a user with no My Tasks content.
 const STATUSES = [
-  "Permanent Resident", "Work Permit", "Study Permit", "Visitor", "Citizen",
-  "International Student", "Work Permit Holder", "Refugee / Protected Person", "Visitor / Tourist",
+  "International Student",
+  "Work Permit Holder",
+  "Permanent Resident",
+  "Refugee / Protected Person",
+  "Visitor / Tourist",
 ];
 
 const emptyForm = {
@@ -32,41 +36,25 @@ function Profile() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  // `user` from AuthContext is already the single source of truth — it's
+  // set directly from updateProfile()'s response, no re-fetch needed. This
+  // used to also call GET /api/profile/:user_id, which reads a *different*
+  // backend store (the `profiles` table) than PATCH /api/profile writes to
+  // (Supabase Auth user_metadata) — that second, unsynced fetch was what
+  // made the form (and, by extension, anything relying on this page)
+  // revert to stale values right after a successful save.
   useEffect(() => {
     if (!user) return;
-    let active = true;
-    setLoadingProfile(true);
     setError("");
-    setForm(current => ({
-      ...current,
+    setForm({
       firstName: user.firstName ?? "",
       lastName: user.lastName ?? "",
       email: user.email ?? "",
       immigrationStatus: user.immigrationStatus || STATUSES[0],
       province: user.province || PROVINCES[0],
       arrivalDate: user.arrivalDate ?? "",
-    }));
-
-    getProfile(getAccessToken(), user.id)
-      .then(profile => {
-        if (!active) return;
-        setForm({
-          firstName: profile.firstName ?? "",
-          lastName: profile.lastName ?? "",
-          email: profile.email ?? user.email ?? "",
-          immigrationStatus: profile.immigrationStatus || STATUSES[0],
-          province: profile.province || PROVINCES[0],
-          arrivalDate: profile.arrivalDate ?? "",
-        });
-      })
-      .catch(err => {
-        if (active) setError(err.message || "Could not load your profile.");
-      })
-      .finally(() => {
-        if (active) setLoadingProfile(false);
-      });
-
-    return () => { active = false; };
+    });
+    setLoadingProfile(false);
   }, [user]);
 
   function set(field) {
