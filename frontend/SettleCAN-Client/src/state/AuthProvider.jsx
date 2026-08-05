@@ -15,22 +15,35 @@ function saveUser(u) {
   else   localStorage.removeItem(KEY_USER);
 }
 
+// "mAry-jO" -> "Mary-Jo" — capitalizes each word/hyphen-segment so names
+// render consistently regardless of how they were typed at signup.
+function capitalizeName(value) {
+  if (!value) return value;
+  return value
+    .trim()
+    .split(/(\s+|-)/)
+    .map((part) => (/^[\s-]+$/.test(part) ? part : part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()))
+    .join("");
+}
+
 // Normalise the backend response shape into the UI shape the app uses
 function toUiUser(apiUser) {
+  const firstName = capitalizeName(apiUser.firstName ?? "");
+  const lastName  = capitalizeName(apiUser.lastName ?? "");
   return {
     id:                apiUser.id               ?? "",
     email:             apiUser.email            ?? "",
     dob:               apiUser.dob              ?? "",
-    name:              apiUser.firstName || apiUser.email?.split("@")[0] || "",
-    fullName:          `${apiUser.firstName ?? ""} ${apiUser.lastName ?? ""}`.trim() || apiUser.email || "",
+    name:              firstName || apiUser.email?.split("@")[0] || "",
+    fullName:          `${firstName} ${lastName}`.trim() || apiUser.email || "",
     immigrationStatus: apiUser.immigrationStatus ?? "International Student",
     province:          apiUser.province         ?? "",
     arrivalDate:       apiUser.arrivalDate      ?? "",
     permitExpiry:      apiUser.permitExpiry     ?? "",
     languageTest:      apiUser.languageTest     ?? "",
     country:           apiUser.country          ?? "",
-    firstName:         apiUser.firstName        ?? "",
-    lastName:          apiUser.lastName         ?? "",
+    firstName,
+    lastName,
     avatar:            null,
   };
 }
