@@ -82,7 +82,7 @@ const STATIC_ARTICLES = [
     ],
     relatedPaths: [
       { label: "Health Info Page", path: "/info/health" },
-      { label: "Settlement Checklist", path: "/checklist" },
+      { label: "My Tasks", path: "/tasks" },
       { label: "Document Alerts", path: "/document-alerts" },
     ],
   },
@@ -324,15 +324,25 @@ export default function ArticleView() {
     fetchContent()
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          // Merge API articles (add readTime estimate if missing)
+          // Merge API articles. content_db stores the article body as one
+          // flat text field (body_content), not structured sections like
+          // the static articles below — wrap it as a single section so it
+          // still gets a real summary and read-time instead of the "1 min
+          // read, no summary" a genuinely empty sections list produces.
           const api = data
             .filter(a => a.status === "Published")
-            .map(a => ({
-              ...a,
-              id:       String(a.content_id ?? a.id),
-              sections: a.sections ?? [],
-              readTime: a.readTime ?? estimateReadTime(a.sections ?? []),
-            }));
+            .map(a => {
+              const sections = a.sections ?? (a.body_content?.trim()
+                ? [{ heading: a.title, body: a.body_content.trim() }]
+                : []);
+              return {
+                ...a,
+                id:       String(a.content_id ?? a.id),
+                summary:  a.summary ?? (a.body_content?.trim() ? a.body_content.trim().slice(0, 160) + (a.body_content.trim().length > 160 ? "…" : "") : undefined),
+                sections,
+                readTime: a.readTime ?? estimateReadTime(sections),
+              };
+            });
           // Keep static articles that don't have an API counterpart
           const apiIds = new Set(api.map(a => a.id));
           const merged = [...api, ...STATIC_ARTICLES.filter(s => !apiIds.has(s.id))];
