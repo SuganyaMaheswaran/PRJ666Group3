@@ -143,7 +143,7 @@ export default function LanguageInfo() {
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               {[["Cost", test.cost], ["Valid for", test.validity]].map(([label, val]) => (
                 <div key={label} style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#8E0002" }}>{val}</div>
+                  <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--color-primary)" }}>{val}</div>
                   <div style={{ fontSize: "0.65rem", color: "#9a8a90", fontWeight: 600, textTransform: "uppercase" }}>{label}</div>
                 </div>
               ))}
@@ -158,7 +158,7 @@ export default function LanguageInfo() {
               { label: "💡 Tip", content: test.tip },
             ].map(item => (
               <div key={item.label} style={{ background: "#fdf7f8", borderRadius: "0.6rem", padding: "0.6rem 0.75rem" }}>
-                <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "#8E0002", marginBottom: "0.25rem" }}>{item.label}</div>
+                <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--color-primary)", marginBottom: "0.25rem" }}>{item.label}</div>
                 <div style={{ fontSize: "0.83rem", color: "#3a2a30", lineHeight: 1.5 }}>{item.content}</div>
               </div>
             ))}

@@ -8,7 +8,7 @@ import { fetchPolicyUpdates } from "../service/taskService";
 import "../scss/FeaturePages.scss";
 
 const CATEGORY_META = {
-  "news releases": { bg: "#fdeaed", text: "#8E0002" },
+  "news releases": { bg: "#fdeaed", text: "var(--color-primary)" },
   "notices":       { bg: "#e8f0fe", text: "#1d4ed8" },
   "backgrounders": { bg: "#f3e8ff", text: "#7c3aed" },
   "speeches":      { bg: "#e6f9ef", text: "#15803d" },
@@ -93,7 +93,7 @@ export default function PolicyUpdates() {
                 <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#1a0d10", margin: 0 }}>{u.title}</h3>
                 {u.summary && <p style={{ fontSize: "0.85rem", color: "#5a4a50", lineHeight: 1.6, margin: 0 }}>{u.summary}</p>}
 
-                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#8E0002" }}>
+                <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--color-primary)" }}>
                   Read official source →
                 </span>
               </a>

@@ -7,7 +7,7 @@
 .fp-page {
   min-height: 100vh;
   // Matches .auth-layout's background (AuthLayout.scss).
-  background: #dfdbd9;
+  background: #E5E3E1;
   padding: 2rem 2.5rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
@@ -67,7 +67,7 @@
 
 // ── Info card ────────────────────────────────────────────────────────────────
 .fp-card {
-  background: #fff;
+  background: #F8FAFC;
   border-radius: 1.25rem;
   padding: 1.25rem 1.4rem;
   // Two-layer "elevated" shadow — matches %card in Dashboard.scss/
@@ -188,7 +188,7 @@
 }
 
 .fp-stat {
-  background: #fff;
+  background: #F8FAFC;
   border-radius: 1rem;
   padding: 0.75rem 0.6rem;
   box-shadow: 0 1px 2px rgba(20,10,12,0.05), 0 6px 20px rgba(20,10,12,0.07);
@@ -303,7 +303,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
-  background: #fff;
+  background: #F8FAFC;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 1px 2px rgba(20,10,12,0.05), 0 6px 20px rgba(20,10,12,0.07);
@@ -342,7 +342,7 @@
 }
 
 .fp-compare-card {
-  background: #fff;
+  background: #F8FAFC;
   border-radius: 1rem;
   padding: 1rem 1.1rem;
   box-shadow: 0 1px 2px rgba(20,10,12,0.05), 0 6px 20px rgba(20,10,12,0.07);
@@ -391,9 +391,9 @@
   gap: 0.5rem;
 
   &__item {
-    background: #fff;
-    border-radius: 0.75rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    background: #F8FAFC;
+    border-radius: 1rem;
+    box-shadow: 0 1px 2px rgba(20,10,12,0.05), 0 6px 20px rgba(20,10,12,0.07);
     overflow: hidden;
   }
 

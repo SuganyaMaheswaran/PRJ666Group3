@@ -186,7 +186,7 @@ export default function HousingSupport() {
               <h3 className="fp-card__title">{p.name}</h3>
               <p className="fp-card__body">{p.desc}</p>
               <a href={p.url} target="_blank" rel="noreferrer"
-                style={{ fontSize: "0.78rem", fontWeight: 700, color: "#8E0002", textDecoration: "none" }}>
+                style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--color-primary)", textDecoration: "none" }}>
                 Learn more on canada.ca →
               </a>
             </div>
@@ -302,7 +302,7 @@ export default function HousingSupport() {
                 <td style={{ fontSize: "0.83rem" }}>{row.board}</td>
                 <td>
                   <a href={row.url} target="_blank" rel="noreferrer"
-                    style={{ fontSize: "0.78rem", fontWeight: 700, color: "#8E0002", textDecoration: "none" }}>
+                    style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--color-primary)", textDecoration: "none" }}>
                     Visit →
                   </a>
                 </td>

@@ -164,7 +164,7 @@ export default function ComplianceTracking() {
                       type="checkbox"
                       checked={isDone}
                       onChange={() => toggle(rule)}
-                      style={{ width: 17, height: 17, accentColor: "#8E0002", cursor: "pointer", flexShrink: 0 }}
+                      style={{ width: 17, height: 17, accentColor: "var(--color-primary)", cursor: "pointer", flexShrink: 0 }}
                     />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>

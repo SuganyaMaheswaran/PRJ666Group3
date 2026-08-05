@@ -109,7 +109,7 @@ export default function SINGuide() {
               <label htmlFor={`doc-${i}`}>
                 {doc.label}
                 {doc.required
-                  ? <span style={{ color: "#8E0002", fontWeight: 700 }}> · Required</span>
+                  ? <span style={{ color: "var(--color-primary)", fontWeight: 700 }}> · Required</span>
                   : <span> · If applicable</span>}
               </label>
             </div>

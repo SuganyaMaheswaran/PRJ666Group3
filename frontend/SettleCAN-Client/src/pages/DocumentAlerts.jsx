@@ -128,7 +128,7 @@ export default function DocumentAlerts() {
       {remindMsg && (
         <div style={{
           background: remindMsg.ok ? "#e6f9ef" : "#fdeaed",
-          color: remindMsg.ok ? "#15803d" : "#8E0002",
+          color: remindMsg.ok ? "#15803d" : "var(--color-primary)",
           borderRadius: "0.6rem", padding: "0.6rem 1rem",
           fontSize: "0.85rem", fontWeight: 600, marginBottom: "0.75rem",
         }}>

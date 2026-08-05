@@ -15,7 +15,7 @@ const MONTH_NAMES = [
 const STATUS_COLOR = {
   "Completed":   "#27ae60",
   "In Progress": "#f97316",
-  "Pending":     "#8E0002",
+  "Pending":     "var(--color-primary)",
   "Document":    "#2563eb",
 };
 
@@ -137,7 +137,7 @@ function WeekView({ tasks = [], onStatusChange }) {
                   <div
                     key={t.user_task_id}
                     className="tasks-cal__week-pill"
-                    style={{ borderLeft: `3px solid ${STATUS_COLOR[t.status] ?? "#8E0002"}` }}
+                    style={{ borderLeft: `3px solid ${STATUS_COLOR[t.status] ?? "var(--color-primary)"}` }}
                   >
                     <span className="tasks-cal__week-pill-cat">{t.category}</span>
                     <span className="tasks-cal__week-pill-title">{t.title}</span>
@@ -224,7 +224,7 @@ function MonthView({ tasks = [], onStatusChange }) {
                   <span
                     key={t.user_task_id}
                     className="tasks-cal__event-pill"
-                    style={{ background: STATUS_COLOR[t.status] ?? "#8E0002" }}
+                    style={{ background: STATUS_COLOR[t.status] ?? "var(--color-primary)" }}
                     title={t.title}
                   >
                     {t.kind === "document" ? "📄 " : ""}{t.title}
@@ -246,7 +246,7 @@ function MonthView({ tasks = [], onStatusChange }) {
           {selected.tasks.map(t => (
             <div key={t.user_task_id} className="tasks-cal__detail-task">
               <div className="tasks-cal__detail-task-left">
-                <span className="tasks-cal__detail-dot" style={{ background: STATUS_COLOR[t.status] ?? "#8E0002" }} />
+                <span className="tasks-cal__detail-dot" style={{ background: STATUS_COLOR[t.status] ?? "var(--color-primary)" }} />
                 <div>
                   <span className="tasks-cal__detail-cat">{t.category}</span>
                   <span className="tasks-cal__detail-name">{t.title}</span>

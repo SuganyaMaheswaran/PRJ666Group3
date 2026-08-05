@@ -104,7 +104,7 @@ export default function HealthCardGuide() {
           {DOCS.map((doc, i) => (
             <div key={i} className="tg-docs__item">
               <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
-              <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "#8E0002", fontWeight: 700 }}> · Required</span> : <span> · If applicable</span>}</label>
+              <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "var(--color-primary)", fontWeight: 700 }}> · Required</span> : <span> · If applicable</span>}</label>
             </div>
           ))}
         </div>
@@ -114,10 +114,10 @@ export default function HealthCardGuide() {
       <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.83rem", background: "#fff", borderRadius: "0.85rem", overflow: "hidden", boxShadow: "0 3px 12px rgba(0,0,0,0.05)", marginBottom: "1.5rem" }}>
         <thead>
           <tr style={{ background: "#fdeaed" }}>
-            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "#8E0002", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Province</th>
-            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "#8E0002", fontSize: "0.7rem", textTransform: "uppercase" }}>Program</th>
-            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "#8E0002", fontSize: "0.7rem", textTransform: "uppercase" }}>Wait Period</th>
-            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "#8E0002", fontSize: "0.7rem", textTransform: "uppercase" }}>Apply</th>
+            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "var(--color-primary)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Province</th>
+            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "var(--color-primary)", fontSize: "0.7rem", textTransform: "uppercase" }}>Program</th>
+            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "var(--color-primary)", fontSize: "0.7rem", textTransform: "uppercase" }}>Wait Period</th>
+            <th style={{ padding: "0.6rem 0.9rem", textAlign: "left", color: "var(--color-primary)", fontSize: "0.7rem", textTransform: "uppercase" }}>Apply</th>
           </tr>
         </thead>
         <tbody>
@@ -131,7 +131,7 @@ export default function HealthCardGuide() {
                 </span>
               </td>
               <td style={{ padding: "0.6rem 0.9rem" }}>
-                <a href={row.url} target="_blank" rel="noreferrer" style={{ fontSize: "0.75rem", fontWeight: 700, color: "#8E0002", textDecoration: "none" }}>Apply →</a>
+                <a href={row.url} target="_blank" rel="noreferrer" style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-primary)", textDecoration: "none" }}>Apply →</a>
               </td>
             </tr>
           ))}

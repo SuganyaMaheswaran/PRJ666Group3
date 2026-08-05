@@ -111,7 +111,7 @@ export default function BankAccountGuide() {
           {DOCS.map((doc, i) => (
             <div key={i} className="tg-docs__item">
               <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
-              <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "#8E0002", fontWeight: 700 }}> · Required</span> : <span> · If available</span>}</label>
+              <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "var(--color-primary)", fontWeight: 700 }}> · Required</span> : <span> · If available</span>}</label>
             </div>
           ))}
         </div>
@@ -125,7 +125,7 @@ export default function BankAccountGuide() {
               <span style={{ fontWeight: 700, fontSize: "0.88rem", color: "#1a0d10" }}>{b.name}</span>
               <span style={{ fontSize: "0.78rem", color: "#6b5a61", marginLeft: "0.5rem" }}>{b.program}</span>
             </div>
-            <a href={b.url} target="_blank" rel="noreferrer" style={{ fontSize: "0.75rem", fontWeight: 700, color: "#8E0002", textDecoration: "none", flexShrink: 0 }}>Visit →</a>
+            <a href={b.url} target="_blank" rel="noreferrer" style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--color-primary)", textDecoration: "none", flexShrink: 0 }}>Visit →</a>
           </div>
         ))}
       </div>

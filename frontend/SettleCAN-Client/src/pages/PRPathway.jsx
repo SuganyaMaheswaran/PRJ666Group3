@@ -92,7 +92,7 @@ function CRSEstimator() {
   const band = crs >= 500 ? { label: "Strong", color: "#15803d", bg: "#e6f9ef" }
     : crs >= 440 ? { label: "Competitive", color: "#b45309", bg: "#fff7e6" }
     : crs >= 380 ? { label: "Moderate", color: "#2563eb", bg: "#eff6ff" }
-    : { label: "Low", color: "#8E0002", bg: "#fdeaed" };
+    : { label: "Low", color: "var(--color-primary)", bg: "#fdeaed" };
 
   const Field = ({ label, children }) => (
     <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
@@ -155,7 +155,7 @@ function CRSEstimator() {
 
       <div style={{ background: "#F9F5F6", borderRadius: "0.6rem", padding: "0.75rem 1rem", fontSize: "0.8rem", color: "#5a4a50" }}>
         💡 Recent Express Entry draws range from <strong>~470–550</strong> for general rounds and <strong>lower</strong> for category-based draws (healthcare, trades, STEM, French). Check{" "}
-        <a href="https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-rounds.html" target="_blank" rel="noreferrer" style={{ color: "#8E0002", fontWeight: 700 }}>IRCC draw history →</a>
+        <a href="https://www.canada.ca/en/immigration-refugees-citizenship/corporate/mandate/policies-operational-instructions-agreements/ministerial-instructions/express-entry-rounds.html" target="_blank" rel="noreferrer" style={{ color: "var(--color-primary)", fontWeight: 700 }}>IRCC draw history →</a>
       </div>
     </div>
   );
@@ -313,11 +313,11 @@ export default function PRPathway() {
             </div>
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#8E0002" }}>{current.timeToPR}</div>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "var(--color-primary)" }}>{current.timeToPR}</div>
                 <div style={{ fontSize: "0.68rem", color: "#9a8a90", fontWeight: 600, textTransform: "uppercase" }}>Time to PR</div>
               </div>
               <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#8E0002" }}>{current.processTime}</div>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "var(--color-primary)" }}>{current.processTime}</div>
                 <div style={{ fontSize: "0.68rem", color: "#9a8a90", fontWeight: 600, textTransform: "uppercase" }}>Processing</div>
               </div>
             </div>
@@ -328,7 +328,7 @@ export default function PRPathway() {
           </p>
 
           <div style={{ marginTop: "1rem" }}>
-            <p style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "#8E0002", margin: "0 0 0.5rem", letterSpacing: "0.07em" }}>Streams &amp; Requirements</p>
+            <p style={{ fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", color: "var(--color-primary)", margin: "0 0 0.5rem", letterSpacing: "0.07em" }}>Streams &amp; Requirements</p>
             {current.streams.map(s => (
               <div key={s.name} style={{ background: "#fdf7f8", borderRadius: "0.6rem", padding: "0.65rem 0.8rem", marginBottom: "0.5rem" }}>
                 <p style={{ fontWeight: 700, fontSize: "0.88rem", margin: "0 0 0.2rem", color: "#1a0d10" }}>{s.name}</p>
@@ -376,7 +376,7 @@ export default function PRPathway() {
                   <td style={{ fontSize: "0.82rem" }}>{row.crs}</td>
                   <td style={{ fontSize: "0.82rem" }}>{row.job}</td>
                   <td style={{ fontSize: "0.82rem" }}>{row.exp}</td>
-                  <td style={{ fontSize: "0.82rem", fontWeight: 600, color: "#8E0002" }}>{row.time}</td>
+                  <td style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-primary)" }}>{row.time}</td>
                 </tr>
               ))}
             </tbody>

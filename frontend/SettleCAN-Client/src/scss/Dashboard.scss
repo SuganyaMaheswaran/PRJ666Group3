@@ -1,11 +1,9 @@
 @use "./variables" as *;
 
-// Two-layer "elevated" shadow (tight contact shadow + soft ambient glow)
-// instead of a flat single shadow + hairline border — reads as a more
-// contemporary, borderless card system, especially against the darker
-// page background it now sits on.
+// Trial palette: page is pure white, so cards are defined by a faint
+// cool-gray tint + shadow instead of a darker page background.
 %card {
-  background: #fff;
+  background: #F8FAFC;
   border-radius: 1.25rem;
   box-shadow: 0 1px 2px rgba(20,10,12,0.05), 0 6px 20px rgba(20,10,12,0.07);
 }
@@ -65,7 +63,7 @@
     font-weight: 700;
     padding: 0.15rem 0.65rem;
     border-radius: 999px;
-    border: 1px solid rgba(142,0,2,0.15);
+    border: 1px solid rgba($primary,0.15);
   }
 
   .dash-notif-chip {

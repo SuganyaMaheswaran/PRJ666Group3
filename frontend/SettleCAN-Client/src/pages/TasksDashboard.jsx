@@ -293,7 +293,14 @@ export default function TasksDashboard() {
   }
 
   async function handleToggleSubtaskStatus(subtask) {
-    const next = NEXT_STATUS[subtask.status] ?? "NOT_STARTED";
+    // Subtasks are a binary checklist item — done or not — not a 3-way
+    // cycle. The parent task's status is never set directly (its checkbox
+    // is non-interactive whenever it has children — see TaskCard below);
+    // it's derived server-side (recompute_ancestor_status, in
+    // 002_task_hierarchy_system.sql) from its children's statuses: NOT_STARTED
+    // while none are done, IN_PROGRESS as soon as any subtask is completed,
+    // COMPLETED once every subtask is.
+    const next = subtask.status === "COMPLETED" ? "NOT_STARTED" : "COMPLETED";
     try {
       replaceTree(await updateTaskNode(subtask.id, { status: next }));
     } catch { showToast("Couldn't update the subtask — check your connection."); }
@@ -523,7 +530,7 @@ export default function TasksDashboard() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-secondary" onClick={() => setShowAddModal(false)}>Cancel</Button>
-          <Button style={{ background: "#8E0002", border: "none" }} onClick={handleSave}>Save Task</Button>
+          <Button style={{ background: "var(--color-primary)", border: "none" }} onClick={handleSave}>Save Task</Button>
         </Modal.Footer>
       </Modal>
 

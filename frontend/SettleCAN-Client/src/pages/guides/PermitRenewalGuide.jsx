@@ -129,7 +129,7 @@ export default function PermitRenewalGuide() {
           {DOCS.map((doc, i) => (
             <div key={i} className="tg-docs__item">
               <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
-              <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "#8E0002", fontWeight: 700 }}> · Required</span> : <span> · If applicable</span>}</label>
+              <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "var(--color-primary)", fontWeight: 700 }}> · Required</span> : <span> · If applicable</span>}</label>
             </div>
           ))}
         </div>

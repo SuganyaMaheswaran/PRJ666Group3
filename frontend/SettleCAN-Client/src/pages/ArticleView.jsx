@@ -162,7 +162,7 @@ function parseSections(bodyContent, fallbackHeading) {
 
 function categoryColor(cat) {
   const MAP = {
-    Employment: "#2563eb", Health: "#15803d", Immigration: "#8E0002",
+    Employment: "#2563eb", Health: "#15803d", Immigration: "var(--color-primary)",
     Finance: "#d97706", Housing: "#7c3aed", General: "#475569",
   };
   return MAP[cat] ?? "#475569";

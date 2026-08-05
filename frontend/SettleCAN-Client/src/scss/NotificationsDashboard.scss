@@ -123,7 +123,7 @@
       background: linear-gradient(145deg, #b3203b 0%, #7b0f20 100%);
     }
     &--warning {
-      background: linear-gradient(145deg, #c0392b 0%, #8E0002 100%);
+      background: linear-gradient(145deg, #c0392b 0%, $primary 100%);
     }
     &--normal {
       background: linear-gradient(145deg, #a33040 0%, #6b1020 100%);
