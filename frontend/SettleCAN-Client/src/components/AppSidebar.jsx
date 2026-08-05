@@ -13,7 +13,6 @@ const NAV = [
 
   { to: "/pr-pathway",              icon: "🍁", label: "PR Pathway"    },
   { to: "/tasks",                   icon: "✅", label: "My Tasks"      },
-  { to: "/calendar",                icon: "📅", label: "Calendar"      },
   { to: "/notifications-dashboard", icon: "🔔", label: "Notifications" },
   { to: "/features",                icon: "🌐", label: "Resources"     },
   { to: "/articles",               icon: "📰", label: "Articles"      },

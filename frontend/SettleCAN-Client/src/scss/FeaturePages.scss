@@ -14,6 +14,15 @@
   @media (max-width: 768px) { padding: 1.25rem 1rem; }
 }
 
+// Opt-in modifier for pages that should read as a centered, boxed column
+// (matching ArticleView's .av-list-page) rather than stretching edge to
+// edge — .fp-page's own background matches its parent .auth-layout
+// exactly, so narrowing this box never creates a visible seam.
+.fp-page--narrow {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 // ── Page header ───────────────────────────────────────────────────────────────
 .fp-header {
   margin-bottom: 2rem;

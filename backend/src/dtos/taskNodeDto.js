@@ -15,6 +15,7 @@ function toTaskNodeDto(node) {
     dueDate: node.due_date,
     dueDateIsManual: node.due_date_is_manual,
     templateItemId: node.template_item_id,
+    canonicalKey: node.canonical_key,
     createdAt: node.created_at,
     updatedAt: node.updated_at,
     children: Array.isArray(node.children) ? node.children.map(toTaskNodeDto) : undefined,

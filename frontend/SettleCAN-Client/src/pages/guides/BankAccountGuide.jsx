@@ -1,7 +1,11 @@
 // BankAccountGuide.jsx — open a Canadian bank account as a newcomer
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../state/AuthContext";
+import { loadChecklist, saveChecklist } from "../../data/guideChecklist";
 import "../../scss/TaskGuide.scss";
+
+const GUIDE_ID = "bank-account";
 
 const BANKS = [
   { name: "TD Bank",        program: "TD New to Canada Banking Package",  url: "https://www.td.com/ca/en/personal-banking/products/bank-accounts/new-to-canada/" },
@@ -59,7 +63,16 @@ const DOCS = [
 ];
 
 export default function BankAccountGuide() {
-  const [checked, setChecked] = useState({});
+  const { user } = useContext(AuthContext);
+  const [checked, setChecked] = useState(() => loadChecklist(GUIDE_ID, user?.id));
+
+  function toggleDoc(i) {
+    setChecked((p) => {
+      const next = { ...p, [i]: !p[i] };
+      saveChecklist(GUIDE_ID, user?.id, next);
+      return next;
+    });
+  }
 
   return (
     <div className="tg-page">
@@ -110,7 +123,7 @@ export default function BankAccountGuide() {
         <div className="tg-docs__list">
           {DOCS.map((doc, i) => (
             <div key={i} className="tg-docs__item">
-              <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
+              <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => toggleDoc(i)} />
               <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "var(--color-primary)", fontWeight: 700 }}> · Required</span> : <span> · If available</span>}</label>
             </div>
           ))}

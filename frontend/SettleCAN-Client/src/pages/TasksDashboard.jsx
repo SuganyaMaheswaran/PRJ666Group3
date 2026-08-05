@@ -6,7 +6,7 @@
 // Backed by the /api/v2/tasks hierarchy API — see
 // docs/TASK_NOTIFICATION_SYSTEM_DESIGN.md.
 import { useState, useEffect, useCallback, useContext, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { Modal, Form, Button } from "react-bootstrap";
 import { AuthContext } from "../state/AuthContext";
 import {
@@ -15,6 +15,7 @@ import {
 } from "../service/taskService";
 import TasksCalendarView from "../components/TasksCalendarView";
 import SmartDateInput from "../components/SmartDateInput";
+import { getTaskResource } from "../utils/taskResourceLinks";
 import "../scss/TasksDashboard.scss";
 
 // #f97316 = $in-progress in scss/_variables.scss — kept in sync manually
@@ -137,6 +138,7 @@ function TaskCard({ task, onToggleStatus, onSetDate, onAddSubtask, onDeleteSubta
   const days = task.dueDate ? daysLeft(task.dueDate) : null;
   const urg = task.dueDate ? urgency(days) : "";
   const cfg = STATUS_CONFIG[task.status] ?? STATUS_CONFIG.NOT_STARTED;
+  const resource = getTaskResource(task);
 
   useEffect(() => {
     if (isHighlighted) {
@@ -232,6 +234,17 @@ function TaskCard({ task, onToggleStatus, onSetDate, onAddSubtask, onDeleteSubta
               <button className="td-card__add-subtask-btn" onClick={() => setAddingSubtask(true)}>+ Add subtask</button>
             )}
           </div>
+
+          {resource && (
+            <Link to={resource.path} className="td-card__resource-banner">
+              <span className="td-card__resource-icon">📖</span>
+              <span className="td-card__resource-text">
+                <span className="td-card__resource-eyebrow">Related resource</span>
+                <span className="td-card__resource-label">{resource.label}</span>
+              </span>
+              <span className="td-card__resource-arrow">→</span>
+            </Link>
+          )}
         </div>
       )}
     </div>
@@ -247,7 +260,7 @@ export default function TasksDashboard() {
   const [tree, setTree] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState("Not started");
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({ title: "", due: "", subtasks: [] });
@@ -371,7 +384,16 @@ export default function TasksDashboard() {
 
   const flat = flatten(tree);
   const filterKey = FILTER_TO_STATUS[filter];
-  const filteredRoots = filter === "All" ? tree : tree.filter((t) => t.status === filterKey);
+  const filteredRoots = (filter === "All" ? tree : tree.filter((t) => t.status === filterKey))
+    .slice()
+    // Earliest due date first, so the most overdue tasks sort to the top;
+    // tasks with no due date carry no urgency signal, so they sink to the end.
+    .sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return new Date(a.dueDate) - new Date(b.dueDate);
+    });
 
   const counts = {
     all: tree.length,
@@ -397,7 +419,7 @@ export default function TasksDashboard() {
   }
 
   return (
-    <div className="td-page" style={{ maxWidth: "100%", width: "100%", boxSizing: "border-box" }}>
+    <div className="td-page">
 
       <div className="td-header">
         <div>
@@ -415,8 +437,8 @@ export default function TasksDashboard() {
         <span className="td-progress__pct">{pct}%</span>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(320px, 40%)", gap: "1.5rem", alignItems: "flex-start" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: 0 }}>
+      <div className="td-body">
+        <div className="td-left">
           <div className="td-filters">
             {FILTERS.map((f) => {
               const count = f === "All" ? counts.all : f === "Not started" ? counts.pending : f === "In Progress" ? counts.inProgress : counts.completed;
@@ -459,7 +481,7 @@ export default function TasksDashboard() {
           </div>
         </div>
 
-        <div style={{ position: "sticky", top: "5rem", minWidth: 0, width: "100%", overflowX: "hidden" }}>
+        <div className="td-right">
           <TasksCalendarView
             tasks={flat
               .filter((t) => t.dueDate)

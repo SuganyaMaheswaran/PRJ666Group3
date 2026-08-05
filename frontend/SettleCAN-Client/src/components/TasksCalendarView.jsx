@@ -34,12 +34,13 @@ function documentsAsEvents(documents = []) {
     }));
 }
 
-// ── Month/Year picker — jump directly to any month/year instead of
-// stepping one at a time with arrows. ──────────────────────────────────────
-function MonthYearPicker({ year, month, onChange, onToday }) {
+// ── Month/Year picker — jump directly to any month/year, or step one at a
+// time with the flanking arrows. ────────────────────────────────────────────
+function MonthYearPicker({ year, month, onChange, onPrev, onNext }) {
   const yearOptions = Array.from({ length: 8 }, (_, i) => new Date().getFullYear() - 3 + i);
   return (
     <div className="tasks-cal__picker">
+      <button className="tasks-cal__nav-btn" onClick={onPrev} aria-label="Previous month">‹</button>
       <select
         className="tasks-cal__picker-select"
         value={month}
@@ -56,7 +57,7 @@ function MonthYearPicker({ year, month, onChange, onToday }) {
       >
         {yearOptions.map((y) => <option key={y} value={y}>{y}</option>)}
       </select>
-      <button className="tasks-cal__today-btn" onClick={onToday}>Today</button>
+      <button className="tasks-cal__nav-btn" onClick={onNext} aria-label="Next month">›</button>
     </div>
   );
 }
@@ -110,7 +111,7 @@ function WeekView({ tasks = [], onStatusChange }) {
         <button className="tasks-cal__nav-btn" onClick={prevWeek} aria-label="Previous week">&#8249;</button>
         <div className="tasks-cal__nav-center">
           <span className="tasks-cal__month">{startLabel} – {endLabel}</span>
-          <button className="tasks-cal__today-btn" onClick={goThisWeek}>This week</button>
+          <button className="tasks-cal__today-link" onClick={goThisWeek}>Today</button>
         </div>
         <button className="tasks-cal__nav-btn" onClick={nextWeek} aria-label="Next week">&#8250;</button>
       </div>
@@ -173,7 +174,15 @@ function MonthView({ tasks = [], onStatusChange }) {
   const [selected, setSelected] = useState(null);
 
   function jumpTo(newYear, newMonth) { setYear(newYear); setMonth(newMonth); setSelected(null); }
-  function goToday()   { setYear(today.getFullYear()); setMonth(today.getMonth()); setSelected(null); }
+  function prevMonth() {
+    if (month === 0) { setYear(year - 1); setMonth(11); } else { setMonth(month - 1); }
+    setSelected(null);
+  }
+  function nextMonth() {
+    if (month === 11) { setYear(year + 1); setMonth(0); } else { setMonth(month + 1); }
+    setSelected(null);
+  }
+  function goToday() { setYear(today.getFullYear()); setMonth(today.getMonth()); setSelected(null); }
 
   const firstDay    = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -196,8 +205,8 @@ function MonthView({ tasks = [], onStatusChange }) {
   return (
     <>
       <div className="tasks-cal__nav">
-        <span className="tasks-cal__month">{MONTH_NAMES[month]} {year}</span>
-        <MonthYearPicker year={year} month={month} onChange={jumpTo} onToday={goToday} />
+        <MonthYearPicker year={year} month={month} onChange={jumpTo} onPrev={prevMonth} onNext={nextMonth} />
+        <button className="tasks-cal__today-link" onClick={goToday}>Today</button>
       </div>
 
       <div className="tasks-cal__grid">

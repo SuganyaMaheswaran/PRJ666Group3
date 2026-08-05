@@ -1,7 +1,11 @@
 // TaxReturnGuide.jsx — file a Canadian income tax return as a newcomer
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../state/AuthContext";
+import { loadChecklist, saveChecklist } from "../../data/guideChecklist";
 import "../../scss/TaskGuide.scss";
+
+const GUIDE_ID = "tax-return";
 
 const FREE_SOFTWARE = [
   { name: "Wealthsimple Tax",  note: "Free for all, NETFILE certified, very user-friendly", url: "https://www.wealthsimple.com/en-ca/tax" },
@@ -67,7 +71,16 @@ const BENEFITS = [
 ];
 
 export default function TaxReturnGuide() {
-  const [checked, setChecked] = useState({});
+  const { user } = useContext(AuthContext);
+  const [checked, setChecked] = useState(() => loadChecklist(GUIDE_ID, user?.id));
+
+  function toggleDoc(i) {
+    setChecked((p) => {
+      const next = { ...p, [i]: !p[i] };
+      saveChecklist(GUIDE_ID, user?.id, next);
+      return next;
+    });
+  }
 
   return (
     <div className="tg-page">
@@ -118,7 +131,7 @@ export default function TaxReturnGuide() {
         <div className="tg-docs__list">
           {DOCS.map((doc, i) => (
             <div key={i} className="tg-docs__item">
-              <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => setChecked(p => ({ ...p, [i]: !p[i] }))} />
+              <input type="checkbox" id={`doc-${i}`} checked={!!checked[i]} onChange={() => toggleDoc(i)} />
               <label htmlFor={`doc-${i}`}>{doc.label}{doc.required ? <span style={{ color: "var(--color-primary)", fontWeight: 700 }}> · Required</span> : <span> · If applicable</span>}</label>
             </div>
           ))}

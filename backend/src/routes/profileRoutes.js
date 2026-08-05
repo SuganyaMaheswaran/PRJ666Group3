@@ -4,6 +4,7 @@ const supabase = require("../../db/supabase");
 const logger = require("../logger");
 const { requireAuth } = require("../middleware/authMiddleware");
 const { getProfileById, updateProfileById } = require("../controllers/profileController");
+const templateService = require("../services/templateService");
 
 // ── GET /api/profile/:user_id ─────────────────────────────────────────────────
 router.get("/:user_id", requireAuth, getProfileById);
@@ -84,6 +85,25 @@ router.patch("/", requireAuth, async (req, res) => {
   );
 
   const meta = data.user?.user_metadata ?? {};
+
+  // A status change means the user needs the NEW status's tasks without
+  // losing progress on tasks they already share with their old status (see
+  // templateService.materialize() / 009_task_canonical_keys.sql). This is
+  // best-effort: the profile update already succeeded, so a generation
+  // failure here is logged, not surfaced as a failed request — the
+  // frontend's own generate-tasks call on the next /tasks load (see
+  // templateController.generateTasks) is a self-healing fallback.
+  if (updates.immigration_status !== undefined) {
+    try {
+      const [onboarding, compliance] = await Promise.all([
+        templateService.generateTasksForUser(req.supabase, req.user.id, meta.immigration_status, meta.arrival_date),
+        templateService.generateComplianceTasksForUser(req.supabase, req.user.id, meta.immigration_status),
+      ]);
+      logger.info({ userId: req.user.id, onboarding, compliance }, "Synced tasks after immigration status change");
+    } catch (err) {
+      logger.error({ err, userId: req.user.id }, "Failed to sync tasks after immigration status change");
+    }
+  }
 
   res.json({
     message: "Profile updated.",

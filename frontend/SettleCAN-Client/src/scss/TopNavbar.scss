@@ -92,6 +92,20 @@
     }
   }
 
+  // Wraps TasksCalendarView, which already renders its own white card
+  // (background/radius/shadow) — the Dropdown.Menu itself is stripped
+  // down to a plain positioning shell so the calendar isn't double-boxed.
+  .calendar-dropdown {
+    width: 360px;
+    max-width: 92vw;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+
+    .tasks-cal { box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+  }
+
   .notif-dropdown {
     width: 320px;
     max-width: 90vw;

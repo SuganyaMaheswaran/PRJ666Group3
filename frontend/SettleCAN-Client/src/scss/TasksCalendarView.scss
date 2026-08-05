@@ -25,7 +25,7 @@
   &__nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 0.85rem;
     flex-wrap: wrap;
     padding-bottom: 0.85rem;
@@ -80,18 +80,21 @@
     &:hover { color: $primary; background: #f5eff2; }
   }
 
-  &__today-btn {
-    border: 1px solid #d9cdd0;
-    background: #fff;
-    color: #4a3a40;
-    border-radius: 999px;
-    padding: 0.2rem 0.7rem;
+  // Small inline text link (not a bordered pill) — jumps back to today's
+  // date without competing visually with the month/year/arrow controls.
+  &__today-link {
+    border: none;
+    background: none;
+    color: $primary;
+    padding: 0;
     font-size: 0.78rem;
     font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
     cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
+    transition: opacity 0.15s;
 
-    &:hover { border-color: $primary; color: $primary; }
+    &:hover { opacity: 0.7; }
   }
 
   // ── Grid ────────────────────────────────────────────────────────────────────

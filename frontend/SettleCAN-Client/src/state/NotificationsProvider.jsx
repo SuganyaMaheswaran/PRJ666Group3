@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useContext, useCallback } from "react";
 import { NotificationsContext } from "./NotificationsContext";
 import { AuthContext } from "./AuthContext";
-import { fetchNotifications, markNotifRead, markAllNotifsRead, fetchTaskTree } from "../service/taskService";
+import { fetchNotifications, markNotifRead, markAllNotifsRead, fetchTaskTree, updateTaskNode } from "../service/taskService";
 import { DEFAULT_DOCS, loadSavedDates } from "../data/documentAlerts";
 
 // Map a task title to a step-by-step guide URL (keyword matching).
@@ -63,7 +63,7 @@ export function NotificationsProvider({ children }) {
         if (!Array.isArray(tree)) return;
         const dated = flattenTaskTree(tree)
           .filter((t) => t.dueDate && t.status !== "COMPLETED")
-          .map((t) => ({ id: `task-${t.id}`, title: t.title, description: t.description ?? "", date: t.dueDate, status: t.status, isTask: true }));
+          .map((t) => ({ id: `task-${t.id}`, taskId: t.id, title: t.title, description: t.description ?? "", date: t.dueDate, status: t.status, isTask: true }));
         setApiTasks(dated);
       })
       .catch(() => { /* offline — apiTasks stays as-is */ });
@@ -123,6 +123,14 @@ export function NotificationsProvider({ children }) {
     await markAllNotifsRead().catch(() => {});
   }
 
+  // "Take Action" on an urgent task notification completes the task
+  // directly, rather than sending the user off to a guide page — refresh
+  // apiTasks afterward so the now-completed task drops off the list.
+  async function completeTask(taskId) {
+    await updateTaskNode(taskId, { status: "COMPLETED" }).catch(() => {});
+    loadApiTasks();
+  }
+
   // Derived notifications — recomputed whenever the combined event list
   // changes. A task/subtask only earns a card once it's within
   // TASK_NOTIFY_WINDOW_DAYS of its due date; a document within
@@ -143,6 +151,7 @@ export function NotificationsProvider({ children }) {
         const urgency = computeUrgency(diff);
         return {
           id:          item.id,
+          taskId:      item.taskId,
           title:       diff <= 0
                          ? `${item.title} — Overdue`
                          : `${item.title} — ${diff} Day${diff !== 1 ? "s" : ""}`,
@@ -191,6 +200,7 @@ export function NotificationsProvider({ children }) {
         unreadApiCount,
         markRead,
         markAllRead,
+        completeTask,
       }}
     >
       {children}

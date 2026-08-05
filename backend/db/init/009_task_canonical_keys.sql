@@ -35,17 +35,6 @@ BEGIN;
 ALTER TABLE task_hierarchy_template_items ADD COLUMN IF NOT EXISTS canonical_key TEXT;
 ALTER TABLE task_nodes ADD COLUMN IF NOT EXISTS canonical_key TEXT;
 
--- A user can only ever have one task_node per canonical_key, and only one
--- task_node per template_item_id — both enforced at the database level as
--- a safety net (the application-level pre-filter in templateService.js is
--- the primary mechanism; this is what stops a *second* code path, a race,
--- or a future bug from ever creating a duplicate regardless).
-CREATE UNIQUE INDEX IF NOT EXISTS task_nodes_user_canonical_key
-  ON task_nodes (user_id, canonical_key) WHERE canonical_key IS NOT NULL;
-
-CREATE UNIQUE INDEX IF NOT EXISTS task_nodes_user_template_item
-  ON task_nodes (user_id, template_item_id) WHERE template_item_id IS NOT NULL;
-
 -- ── Onboarding overlaps ──────────────────────────────────────────────────
 -- Only the items that are genuinely the same action get a shared key.
 -- SIN: every status except Visitor (visitors don't have a SIN task at all).
@@ -117,6 +106,35 @@ WHERE ti.template_id = t.template_id
     'Report address changes to IRCC',
     'Do not criminally offend — it affects future applications'
   );
+
+-- ── Backfill existing task_nodes ─────────────────────────────────────────
+-- Everything above only keyed the TEMPLATE items. Without this step, a user
+-- who already has a pre-migration task_node (e.g. an "Open a Canadian bank
+-- account" task created before today) would still get duplicated on their
+-- next status change: their existing node's canonical_key would still be
+-- NULL, and its template_item_id belongs to the OLD status's template so it
+-- can't match the NEW status's (different) item id either. Copying the now-
+-- keyed value across via each node's own template_item_id closes that gap
+-- for every task generated before this migration ran.
+UPDATE task_nodes tn
+SET canonical_key = ti.canonical_key
+FROM task_hierarchy_template_items ti
+WHERE tn.template_item_id = ti.item_id
+  AND ti.canonical_key IS NOT NULL
+  AND tn.canonical_key IS NULL;
+
+-- A user can only ever have one task_node per canonical_key, and only one
+-- task_node per template_item_id — both enforced at the database level as
+-- a safety net (the application-level pre-filter in templateService.js is
+-- the primary mechanism; this is what stops a *second* code path, a race,
+-- or a future bug from ever creating a duplicate regardless). Created last,
+-- after the backfill above, so it validates the final data rather than
+-- rejecting a backfill that would otherwise collide with itself.
+CREATE UNIQUE INDEX IF NOT EXISTS task_nodes_user_canonical_key
+  ON task_nodes (user_id, canonical_key) WHERE canonical_key IS NOT NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS task_nodes_user_template_item
+  ON task_nodes (user_id, template_item_id) WHERE template_item_id IS NOT NULL;
 
 COMMIT;
 
