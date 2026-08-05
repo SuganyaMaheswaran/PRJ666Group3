@@ -94,6 +94,8 @@ router.patch("/", requireAuth, async (req, res) => {
       province: meta.province ?? "",
       country: meta.country ?? "",
       arrivalDate: meta.arrival_date ?? "",
+      permitExpiry: meta.permit_expiry ?? "",
+      languageTest: meta.language_test ?? "",
     },
   });
 });
