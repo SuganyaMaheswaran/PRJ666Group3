@@ -322,6 +322,9 @@
     color: #3a2a30;
     line-height: 1.75;
     margin: 0;
+    // content_db articles store body text as one flat field with blank-line
+    // paragraph breaks (no HTML) — preserve those breaks on render.
+    white-space: pre-line;
   }
 }
 
