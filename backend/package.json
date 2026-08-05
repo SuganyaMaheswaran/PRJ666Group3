@@ -19,6 +19,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "fast-xml-parser": "^5.10.1",
+    "node-cron": "^4.6.0",
     "nodemailer": "^6.10.1",
     "nodemon": "^3.1.14",
     "pg": "^8.21.0",
@@ -36,9 +38,9 @@
     "testEnvironment": "node"
   },
   "lint-staged": {
-  "*.js": [
-    "eslint --fix",
-    "prettier --write"
-  ]
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

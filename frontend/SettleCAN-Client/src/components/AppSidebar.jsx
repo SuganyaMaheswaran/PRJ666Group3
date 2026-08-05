@@ -1,63 +1,10 @@
 // AppSidebar.jsx — persistent sidebar shown on all authenticated pages
-// Mini calendar reads events from NotificationsContext; clicking navigates to /notifications-dashboard
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../state/AuthContext";
 import { NotificationsContext } from "../state/NotificationsContext";
 import "../scss/AppSidebar.scss";
-
-// ── Mini Calendar ─────────────────────────────────────────────────────────────
-const DAYS = ["S","M","T","W","T","F","S"];
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-function MiniCalendar({ events = [] }) {
-  const navigate = useNavigate();
-  const today    = new Date();
-  const [year, setYear]   = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
-
-  function prev() { month === 0 ? (setMonth(11), setYear(y => y-1)) : setMonth(m => m-1); }
-  function next() { month === 11 ? (setMonth(0), setYear(y => y+1)) : setMonth(m => m+1); }
-
-  const firstDay    = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells = [...Array(firstDay).fill(null), ...Array.from({length: daysInMonth}, (_,i) => i+1)];
-
-  function hasEvent(day) {
-    return events.some(e => {
-      if (!e.date) return false;
-      const d = new Date(e.date + "T00:00:00");
-      return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
-    });
-  }
-
-  const isCurrentMonth = year === today.getFullYear() && month === today.getMonth();
-
-  return (
-    <div className="mc-wrap" onClick={() => navigate("/notifications-dashboard")} title="View Notifications Calendar">
-      <div className="mc-nav">
-        <button onClick={e => { e.stopPropagation(); prev(); }}>‹</button>
-        <span>{MONTHS[month]} {year}</span>
-        <button onClick={e => { e.stopPropagation(); next(); }}>›</button>
-      </div>
-      <div className="mc-grid">
-        {DAYS.map((d,i) => <div key={i} className="mc-dh">{d}</div>)}
-        {cells.map((day, i) => {
-          if (!day) return <div key={`e-${i}`} className="mc-cell mc-cell--empty" />;
-          const isToday = isCurrentMonth && day === today.getDate();
-          const dotted  = hasEvent(day);
-          return (
-            <div key={day} className={`mc-cell ${isToday ? "mc-cell--today" : ""} ${dotted ? "mc-cell--event" : ""}`}>
-              {day}
-              {dotted && <span className="mc-dot" />}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
 
 // ── Nav items ────────────────────────────────────────────────────────────────
 const NAV = [
@@ -66,6 +13,7 @@ const NAV = [
 
   { to: "/pr-pathway",              icon: "🍁", label: "PR Pathway"    },
   { to: "/tasks",                   icon: "✅", label: "My Tasks"      },
+  { to: "/calendar",                icon: "📅", label: "Calendar"      },
   { to: "/notifications-dashboard", icon: "🔔", label: "Notifications" },
   { to: "/features",                icon: "🌐", label: "Resources"     },
   { to: "/articles",               icon: "📰", label: "Articles"      },
@@ -93,15 +41,15 @@ export default function AppSidebar({ collapsed, onToggle }) {
         </button>
       </div>
 
-      {/* User greeting */}
+      {/* User greeting — the whole block opens Profile settings, not just the avatar */}
       {!collapsed && user && (
-        <div className="asb-user">
-          <NavLink to="/profile" className="asb-avatar" aria-label="Open profile settings" title="Profile settings">{user.name[0]}</NavLink>
+        <NavLink to="/profile" className="asb-user" aria-label="Open profile settings" title="Profile settings">
+          <span className="asb-avatar">{user.name[0]}</span>
           <div>
-            <div className="asb-user__name">{user.name}</div>
+            <div className="asb-user__name">{user.fullName || user.name}</div>
             <div className="asb-user__status">{user.immigrationStatus}</div>
           </div>
-        </div>
+        </NavLink>
       )}
 
       {/* Navigation */}
@@ -121,14 +69,6 @@ export default function AppSidebar({ collapsed, onToggle }) {
           </NavLink>
         ))}
       </nav>
-
-      {/* Mini calendar (hidden when collapsed) */}
-      {!collapsed && (
-        <div className="asb-calendar-wrap">
-          <span className="asb-section-label">📅 Calendar</span>
-          <MiniCalendar events={notifCtx?.calendarEvents ?? []} />
-        </div>
-      )}
 
       {/* Logout */}
       <div className="asb-bottom">
