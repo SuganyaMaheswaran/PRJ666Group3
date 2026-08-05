@@ -101,15 +101,6 @@ export default function DocumentAlerts() {
     setTimeout(() => setRemindMsg(null), 3000);
   }
 
-  function clearDate(id) {
-    const updated = docs.map((d) =>
-      d.id === id ? { ...d, expiryDate: "" } : d,
-    );
-    setDocs(updated);
-    const dates = Object.fromEntries(updated.map((d) => [d.id, d.expiryDate]));
-    saveDates(uid, dates);
-  }
-
   function startEdit(doc) {
     setEditId(doc.id);
     setDateInput(doc.expiryDate);
@@ -330,20 +321,6 @@ export default function DocumentAlerts() {
                       disabled={remindedIds.has(doc.id)}
                     >
                       {remindedIds.has(doc.id) ? "✓ Reminded" : "🔔 Remind me"}
-                    </button>
-                  )}
-                  {doc.expiryDate && (
-                    <button
-                      className="fp-btn fp-btn--ghost"
-                      style={{
-                        padding: "0.28rem 0.7rem",
-                        fontSize: "0.75rem",
-                        color: "#c0392b",
-                        borderColor: "#c0392b",
-                      }}
-                      onClick={() => clearDate(doc.id)}
-                    >
-                      Clear
                     </button>
                   )}
                 </div>
