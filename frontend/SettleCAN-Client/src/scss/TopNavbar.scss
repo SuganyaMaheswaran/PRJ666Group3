@@ -18,10 +18,14 @@
     cursor: pointer;
     margin-right: 3rem;
 
+    @media (max-width: 480px) { margin-right: 0.75rem; }
+
     .brand-text {
       font-size: 1.5rem;
       font-weight: 600;
       color: $text-dark;
+
+      @media (max-width: 480px) { font-size: 1.15rem; }
 
       .brand-highlight {
         color: $primary;
@@ -157,6 +161,8 @@
     gap: 0.75rem;
     margin-left: auto;
 
+    @media (max-width: 480px) { gap: 0.4rem; }
+
     .signup-btn {
       background-color: $primary;
       border: none;
@@ -164,6 +170,8 @@
       font-weight: 600;
       padding: 0.45rem 1.2rem;
       border-radius: 6px;
+
+      @media (max-width: 480px) { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
     }
 
     .signin-btn {
@@ -173,6 +181,8 @@
       font-weight: 500;
       padding: 0.45rem 1.2rem;
       border-radius: 6px;
+
+      @media (max-width: 480px) { padding: 0.4rem 0.7rem; font-size: 0.85rem; }
     }
   }
 }
