@@ -117,11 +117,11 @@ export default function GettingStarted() {
           SettleCAN organises everything in one place so nothing falls through the cracks.
         </p>
         <div className="gs-explainer__pills">
-          <span>📋 Personalised checklists</span>
-          <span>⏰ Permit & document reminders</span>
-          <span>📚 Step-by-step guides</span>
-          <span>🍁 PR & immigration pathways</span>
-          <span>💬 Community support</span>
+          <Link to="/document-alerts">⏰ Permit & document reminders</Link>
+          <Link to="/pr-pathway">🍁 PR & immigration pathways</Link>
+          <Link to="/community">💬 Community support</Link>
+          <Link to="/housing">🏠 Housing</Link>
+          <Link to="/articles">📰 Articles</Link>
         </div>
       </div>
 
