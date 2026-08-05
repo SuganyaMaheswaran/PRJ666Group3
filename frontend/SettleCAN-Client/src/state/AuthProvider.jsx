@@ -142,7 +142,14 @@ export function AuthProvider({ children }) {
     setAuthError(null);
 
     try {
-      const response = await updateProfileRequest(getAccessToken(), user.id, {
+      // No userId here on purpose — passing one makes authService.js hit
+      // PUT /api/profile/:user_id, which writes to a separate `profiles`
+      // table that login/`/auth/me` never read from (they read Supabase
+      // Auth's user_metadata exclusively). That mismatch is why an update
+      // would appear to "work" for the rest of the session but silently
+      // vanish on sign-out/sign-in. PATCH /api/profile (no userId) writes
+      // to user_metadata directly, matching what login actually reads.
+      const response = await updateProfileRequest(getAccessToken(), undefined, {
         first_name: profile.firstName,
         last_name: profile.lastName,
         immigration_status: profile.immigrationStatus,
