@@ -4,7 +4,6 @@
 SettleCAN helps international students, immigrants, and newcomers navigate their Canadian settlement journey with personalized task checklists, deadline tracking, curated official guidance, and a supportive community — replacing scattered government pages and spreadsheets with one organized dashboard.
 
 [![CI](https://github.com/SuganyaMaheswaran/PRJ666Group3/actions/workflows/ci.yml/badge.svg)](https://github.com/SuganyaMaheswaran/PRJ666Group3/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#license--acknowledgments)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org/)
 
 ---
