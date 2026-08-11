@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: settlecan-frontend
+  labels:
+    app: settlecan-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: settlecan-frontend
+  template:
+    metadata:
+      labels:
+        app: settlecan-frontend
+    spec:
+      containers:
+        - name: frontend
+          # Built with --build-arg / .env so VITE_API_URL=http://settlecan.local/api
+          # (Vite bakes this in at build time — see k8s/README.md step 4.)
+          image: settlecan-frontend:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "150m"
+              memory: "128Mi"
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+      securityContext:
+        runAsNonRoot: true
+ 

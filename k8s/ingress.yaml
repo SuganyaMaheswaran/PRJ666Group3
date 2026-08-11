@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: settlecan-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: settlecan.local
+      http:
+        paths:
+          # Backend routes already expect an /api prefix (see readme.md),
+          # so no rewrite-target annotation is needed here.
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: settlecan-backend
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: settlecan-frontend
+                port:
+                  number: 80
