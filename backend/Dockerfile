@@ -15,12 +15,12 @@ COPY --chown=nonroot:nonroot . .
 # 4. Switch to non-root user
 USER nonroot
 
-# Cloud Run defaults to 8080. If your server.js uses 5000, 
-# you MUST ensure your server.js listens on the PORT environment variable
-# provided by Cloud Run, or change this to 8080.
-EXPOSE 8080
+# Local/dev default port (docker-compose maps 5000:5000 and sets PORT=5000).
+# Deployments that require a different port (e.g. Cloud Run's 8080) should
+# override PORT via the platform's environment configuration.
+EXPOSE 5000
 
-# Use the PORT environment variable if available, otherwise default to 8080
-ENV PORT=8080
+# Use the PORT environment variable if available, otherwise default to 5000
+ENV PORT=5000
 
 CMD ["node", "server.js"]

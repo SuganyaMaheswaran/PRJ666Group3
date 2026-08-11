@@ -22,6 +22,9 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
+          env:
+            - name: BACKEND_URL
+              value: http://settlecan-backend # in-cluster Service (see backend-service.yaml), envsubst'd into nginx.conf
           resources:
             requests:
               cpu: "50m"
@@ -31,6 +34,8 @@ spec:
               memory: "128Mi"
           securityContext:
             runAsNonRoot: true
+            runAsUser: 101 # nginx:alpine's non-root "nginx" user; kubelet can't
+                            # verify a non-numeric USER name against runAsNonRoot
             allowPrivilegeEscalation: false
             capabilities:
               drop: ["ALL"]
