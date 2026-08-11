@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: settlecan-backend:local
+          image: settlecan-backend:broken
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
