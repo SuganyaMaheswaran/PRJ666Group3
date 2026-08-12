@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: settlecan-frontend-bluegreen
+  labels:
+    app: settlecan-frontend-bluegreen
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: settlecan-frontend-bluegreen
+  template:
+    metadata:
+      labels:
+        app: settlecan-frontend-bluegreen
+    spec:
+      containers:
+        - name: frontend
+          image: settlecan-frontend:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BACKEND_URL
+              value: http://settlecan-backend
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "150m"
+              memory: "128Mi"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+  strategy:
+    blueGreen:
+      activeService: settlecan-frontend-active
+      previewService: settlecan-frontend-preview
+      autoPromotionEnabled: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: settlecan-frontend-active
+spec:
+  selector:
+    app: settlecan-frontend-bluegreen
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: settlecan-frontend-preview
+spec:
+  selector:
+    app: settlecan-frontend-bluegreen
+  ports:
+    - port: 80
+      targetPort: 8080
