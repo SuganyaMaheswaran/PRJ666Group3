@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: argocd-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: argocd.rules
+      rules:
+        - alert: ArgoCDAppNotHealthy
+          expr: argocd_app_info{health_status!="Healthy"} == 1
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Argo CD app {{ $labels.name }} is not healthy"
+            description: "Application {{ $labels.name }} has health status {{ $labels.health_status }}."
+
+        - alert: ArgoCDAppOutOfSync
+          expr: argocd_app_info{sync_status!="Synced"} == 1
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Argo CD app {{ $labels.name }} is out of sync"
+            description: "Application {{ $labels.name }} has sync status {{ $labels.sync_status }}."
