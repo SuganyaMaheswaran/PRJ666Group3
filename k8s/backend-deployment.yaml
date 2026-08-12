@@ -15,9 +15,9 @@ spec:
         app: settlecan-backend
     spec:
       containers:
-      
+        - name: settlecan-backend
           image: settlecan-backend:local
-          ibrokenullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           env:
@@ -52,8 +52,4 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 20
       securityContext:
-        runAsNonRoot: true
-nds: 20
-      securityContext:
-        runAsNonRoot: trueeurityContext:
         runAsNonRoot: true
