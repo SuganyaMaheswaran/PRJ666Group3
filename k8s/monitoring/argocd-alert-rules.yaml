@@ -13,7 +13,7 @@ spec:
           expr: argocd_app_info{health_status!="Healthy"} == 1
           for: 1m
           labels:
-            severity: warning
+            severity: critical
           annotations:
             summary: "Argo CD app {{ $labels.name }} is not healthy"
             description: "Application {{ $labels.name }} has health status {{ $labels.health_status }}."
@@ -22,7 +22,7 @@ spec:
           expr: argocd_app_info{sync_status!="Synced"} == 1
           for: 1m
           labels:
-            severity: warning
+            severity: critical
           annotations:
             summary: "Argo CD app {{ $labels.name }} is out of sync"
             description: "Application {{ $labels.name }} has sync status {{ $labels.sync_status }}."
